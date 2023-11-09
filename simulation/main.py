@@ -7,6 +7,8 @@ from console.console import run_console
 from components.pir import run_pir
 import time
 
+from actuators.buzzer import run_buzzer
+
 
 
 try:
@@ -26,13 +28,16 @@ if __name__ == "__main__":
         # run_dht(dht1_settings, threads, stop_event)
         # ds1_setings = settings["DS1"]
         # run_ds(ds1_setings, threads, stop_event)
-        rpir1_setings = settings["RPIR1"]
-        run_pir(rpir1_setings, threads, stop_event, "room")
-        rpir2_setings = settings["RPIR2"]
-        run_pir(rpir2_setings, threads, stop_event, "room")
-        dpir1_setings = settings["DPIR1"]
-        run_pir(dpir1_setings, threads, stop_event, "door")
+
+        # rpir1_setings = settings["RPIR1"]
+        # run_pir(rpir1_setings, threads, stop_event, "room")
+        # rpir2_setings = settings["RPIR2"]
+        # run_pir(rpir2_setings, threads, stop_event, "room")
+        # dpir1_setings = settings["DPIR1"]
+        # run_pir(dpir1_setings, threads, stop_event, "door")
         # run_console(settings, threads, stop_event)
+        buzzer_setings = settings["DB"]
+        run_buzzer(buzzer_setings, threads, stop_event)
         while True:
             time.sleep(1)
 
