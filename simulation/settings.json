@@ -11,5 +11,10 @@
     "DL": {
         "simulated": true,
         "pin": 17
+    },
+    "DUS1": {
+        "simulated": true,
+        "pin_trig": 17,
+        "pin_echo": 17
     }
 }
