@@ -6,6 +6,7 @@ def generate_values():
       while True:
             change = random.uniform(-5, 5)
             if (dist + change < 0): dist = 0
+            if (dist + change > 10): dist = 0   # dist > 10 meters - object is no longer registered
             else: dist += change
             yield dist
 
