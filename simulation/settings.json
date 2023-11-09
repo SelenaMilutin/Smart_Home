@@ -21,5 +21,16 @@
         "simulated": true,
         "pin_trig": 17,
         "pin_echo": 17
+    },
+    "DMS": {
+        "simulated": true,
+        "R1": 25,
+        "R2": 8,
+        "R3": 7,
+        "R4": 1,
+        "C1": 12,
+        "C2": 16,
+        "C3": 20,
+        "C4": 21
     }
 }

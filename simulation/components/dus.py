@@ -13,11 +13,11 @@ def dus_callback(val):
 
 def run_dus(settings, threads, stop_event):
         if settings['simulated']:
-            print("Starting dus sumilator")
+            print("Starting dus simulator")
             dus_thread = threading.Thread(target = run_dus_simulator, args=(dus_callback, stop_event))
             dus_thread.start()
             threads.append(dus_thread)
-            print("dus sumilator started")
+            print("dus simulator started")
         else:
             from sensors.dus import run_dus_loop
             print("Starting dus loop")
