@@ -5,9 +5,11 @@ def generate_values():
       dist = 0
       while True:
             change = random.uniform(-5, 5)
-            if (dist + change < 0): dist = 0
-            if (dist + change > 10): dist = 0   # dist > 10 meters - object is no longer registered
-            else: dist += change
+            if (dist + change < 0 or dist + change > 10) : 
+                # dist > 10 meters - object is no longer registered
+                dist = 0 
+                continue
+            dist += change
             yield dist
 
 
@@ -16,4 +18,4 @@ def run_dus_simulator(callback, stop_event):
         callback(val)
         if stop_event.is_set():
             break
-        time.sleep(1)
+        time.sleep(2)

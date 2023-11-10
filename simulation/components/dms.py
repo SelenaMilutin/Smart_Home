@@ -8,7 +8,8 @@ def callback(pin_val):
     print("DOOR MEMBRANE SWITCH")
     print("="*20)
     # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-    print(f"Entered pin {pin_val}")
+    # print(f"Entered pin {pin_val}")
+    print(f"Activated")
 
 
 def run_dms(settings, threads, stop_event):

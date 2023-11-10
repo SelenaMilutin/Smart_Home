@@ -15,7 +15,8 @@
     },
     "DL": {
         "simulated": true,
-        "pin": 17
+        "pin": 17,
+        "on": true
     },
     "DUS1": {
         "simulated": true,
