@@ -13,10 +13,10 @@ def callback_room_pir(action):
 
 def callback_door_pir(action):
     # t = time.localtime()
-    print("Door PASSIVE INFRARED SENSOR")
+    print("DOOR PASSIVE INFRARED SENSOR")
     print("="*20)
     # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-    print(f"Motion detected in door")
+    print(f"Motion detected at door")
 
 
 def run_pir(settings, threads, stop_event, location):
@@ -36,7 +36,6 @@ def run_pir(settings, threads, stop_event, location):
                 rpir_thread = threading.Thread(target=run_pir_loop, args=(settings['pin'], callback_room_pir, location, stop_event))
             else:
                 rpir_thread = threading.Thread(target=run_pir_loop, args=(settings['pin'], callback_door_pir, location, stop_event))
-                 
             rpir_thread.start()
             threads.append(rpir_thread)
             print("Rpir1 loop started")

@@ -12,8 +12,6 @@ def callback(val):
      
 
 def run_buzzer(settings, threads, stop_event):
-        # print("!!!!!!!!!!!!!!!!!!!!!!")
-        # print("SA SPACE SE PALI A BACSPACE ISKLJUCUJE SLUSANJE ZA TASTATURU ZA SAD")
         if settings['simulated']:
             print("Starting buzz sumilator")
             buzz_thread = threading.Thread(target = run_buzz_simulation, args=(callback, stop_event))
