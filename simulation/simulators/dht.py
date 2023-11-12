@@ -11,7 +11,7 @@ def generate_values(initial_temp = 25, initial_humidity=20):
                   humidity = 0
             if humidity > 100:
                   humidity = 100
-            yield humidity, temperature, "Hdnkfj"
+            yield humidity, temperature, "DHTLIB_OK"
 
       
 
