@@ -3,6 +3,8 @@ import time
 import random
 import keyboard
 
+from server.messenger_sender import send_measurement
+
 
 # def on_key_event_wrapper(callback):
 #     """
@@ -13,6 +15,8 @@ import keyboard
 #         nonlocal pin
 #         if event.event_type == keyboard.KEY_DOWN and event.name.isdigit():
 #             print(f"Key '{event.name}' is pressed in simulator")
+            # send_measurement(key ili sta vec, settings)
+
 #             pin += event.name
 #             time.sleep(0.1)
 #         if event.event_type == keyboard.KEY_DOWN and event.name == '#':
@@ -27,7 +31,7 @@ def generate_values():
             rnd = random.randint(0, 1)
             yield rnd
 
-def run_dms_simulator(callback, stop_event):
+def run_dms_simulator(settings, callback, stop_event):
     
     # keyboard.hook(on_key_event_wrapper(callback))
     # while True:
@@ -38,6 +42,7 @@ def run_dms_simulator(callback, stop_event):
     for val in generate_values():
         if (val):
             callback(None)
+            send_measurement(1, settings)
         if stop_event.is_set():
             break
         time.sleep(2)

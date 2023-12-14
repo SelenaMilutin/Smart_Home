@@ -15,7 +15,7 @@ def callback(pin_val):
 def run_dms(settings, threads, stop_event):
         if settings['simulated']:
             print("Starting dms simulator")
-            dms_thread = threading.Thread(target = run_dms_simulator, args=(callback, stop_event))
+            dms_thread = threading.Thread(target = run_dms_simulator, args=(settings, callback, stop_event))
             dms_thread.start()
             threads.append(dms_thread)
             print("dms simulator started")

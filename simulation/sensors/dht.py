@@ -2,6 +2,8 @@
 import RPi.GPIO as GPIO
 import time
 
+from server.messenger_sender import send_measurement
+
 class DHT(object):
 	DHTLIB_OK = 0
 	DHTLIB_ERROR_CHECKSUM = -1
@@ -87,12 +89,14 @@ def parseCheckCode(code):
 		return "DHTLIB_INVALID_VALUE"
 
 
-def run_dht_loop(dht, delay, callback, stop_event):
+def run_dht_loop(dht, delay, settings, callback, stop_event):
 		while True:
 			check = dht.readDHT11()
 			code = parseCheckCode(check)
 			humidity, temperature = dht.humidity, dht.temperature
 			callback(humidity, temperature, code)
+			send_measurement(temperature, settings)
+			send_measurement(humidity, settings, topic_num=1)
 			if stop_event.is_set():
 					break
 			time.sleep(delay)  # Delay between readings

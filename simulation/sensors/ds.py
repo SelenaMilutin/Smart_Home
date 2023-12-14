@@ -1,7 +1,8 @@
 import RPi.GPIO as GPIO
 import time
 
-def run_ds_loop(port, callback, stop_event):
+def run_ds_loop(settings, callback, stop_event):
+    port = settings['pin']
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(port, GPIO.IN, pull_up_down = GPIO.PUD_UP)
     GPIO.add_event_detect(port, GPIO.RISING, callback =
