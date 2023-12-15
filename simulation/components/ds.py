@@ -9,6 +9,7 @@ def callback(event):
     print("="*20)
     # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
     print(f"Door open")
+    # TODO send measurment
 
 
 def run_ds(settings, threads, stop_event):

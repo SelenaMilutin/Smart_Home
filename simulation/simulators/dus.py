@@ -1,6 +1,8 @@
 import time
 import random
 
+from server.messenger_sender import send_measurement
+
 def generate_values():
       dist = 0
       while True:
@@ -13,9 +15,10 @@ def generate_values():
             yield dist
 
 
-def run_dus_simulator(callback, stop_event):
+def run_dus_simulator(settings, callback, stop_event):
     for val in generate_values():
         callback(val)
+        send_measurement(val, settings)
         if stop_event.is_set():
             break
         time.sleep(2)
