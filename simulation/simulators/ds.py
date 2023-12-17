@@ -1,7 +1,6 @@
 import time
 import random
 
-from server.messenger_sender import send_measurement
 
 def generate_values():
       while True:
@@ -11,13 +10,12 @@ def generate_values():
       
 
 def run_ds_simulator(settings, callback, stop_event):
-    previous = 0;
+    previous = 0
     while True:
         pressed = random.randint(0, 1)
         # print(pressed)
         if (pressed==0 and previous==1):
-            callback(None)
-            send_measurement(1, settings)
+            callback(settings)
             
         # elif (pressed==0 and previous==1):
         #      print("zakljucano")

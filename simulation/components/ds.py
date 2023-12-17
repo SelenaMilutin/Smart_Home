@@ -2,14 +2,15 @@
 
 from simulators.ds import run_ds_simulator
 import threading
+from server.messenger_sender import send_measurement
 
-def callback(event):
+def callback(settings):
     # t = time.localtime()
     print("BUTTON")
     print("="*20)
     # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
     print(f"Door open")
-    # TODO send measurment
+    send_measurement(1, settings)
 
 
 def run_ds(settings, threads, stop_event):
