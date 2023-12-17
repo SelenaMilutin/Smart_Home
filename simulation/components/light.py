@@ -15,7 +15,7 @@ def callback(val):
 def run_light(settings, threads, stop_event):
         if settings['simulated']:
             print("Starting light simulator")
-            light_thread = threading.Thread(target = run_light_simulator, args=(callback, stop_event))
+            light_thread = threading.Thread(target = run_light_simulator, args=(settings, callback, stop_event))
             light_thread.start()
             threads.append(light_thread)
             print("light simulator started")
