@@ -6,10 +6,10 @@ from server.messenger_sender import send_measurement
 
 def callback(settings):
     # t = time.localtime()
-    print("BUTTON")
-    print("="*20)
+    # print("BUTTON")
+    # print("="*20)
     # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-    print(f"Door open")
+    # print(f"Door open")
     send_measurement(1, settings)
 
 

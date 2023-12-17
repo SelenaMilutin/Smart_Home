@@ -8,19 +8,19 @@ from server.messenger_sender import send_measurement
 
 def callback_room_pir(settings):
     # t = time.localtime()
-    print("ROOM PASSIVE INFRARED SENSOR")
-    print("="*20)
+    # print("ROOM PASSIVE INFRARED SENSOR")
+    # print("="*20)
     # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-    print(f"Motion detected in room")
+    # print(f"Motion detected in room")
     send_measurement(1, settings)
 
 
 def callback_door_pir(settings):
     # t = time.localtime()
-    print("DOOR PASSIVE INFRARED SENSOR")
-    print("="*20)
+    # print("DOOR PASSIVE INFRARED SENSOR")
+    # print("="*20)
     # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-    print(f"Motion detected at door")
+    # print(f"Motion detected at door")
     send_measurement(1, settings)
 
 

@@ -7,12 +7,12 @@ from server.messenger_sender import send_measurement
 
 def callback(pin_val, settings):
     # t = time.localtime()
-    print("DOOR MEMBRANE SWITCH")
-    print("="*20)
+    # print("DOOR MEMBRANE SWITCH")
+    # print("="*20)
     # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
     # print(f"Entered pin {pin_val}")
     if (pin_val == 1):
-        print(f"Activated")
+        # print(f"Activated")
         send_measurement(pin_val, settings)
 
 

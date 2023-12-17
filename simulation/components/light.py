@@ -5,8 +5,8 @@ import threading
 
 def callback(val):
     # t = time.localtime()
-    print("LIGHT")
-    print("="*20)
+    # print("LIGHT")
+    # print("="*20)
     # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
     # print(f"Entered pin {pin_val}")
     print(f"Light {val}")

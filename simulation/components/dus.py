@@ -5,8 +5,8 @@ from simulators.dus import run_dus_simulator
 
 def dus_callback(val):
     # t = time.localtime()
-    print("DOOR ULTRASONIC SENSOR")
-    print("="*20)
+    # print("DOOR ULTRASONIC SENSOR")
+    # print("="*20)
     # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
     print(f"Distance: {val}")
 
