@@ -8,11 +8,11 @@ def generate_values():
             yield rnd
       
 
-def run_pir_simulator(callback, stop_event):
+def run_pir_simulator(settings, callback, stop_event):
     for pressed in generate_values():
         if pressed:
-            callback(None)
+            callback(settings)
         if stop_event.is_set():
             break
-        time.sleep(1)
+        time.sleep(2)
               
