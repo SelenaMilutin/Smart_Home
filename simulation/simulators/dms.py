@@ -1,7 +1,7 @@
 import copy
 import time
 import random
-import keyboard
+# import keyboard
 
 from server.messenger_sender import send_measurement
 
@@ -41,8 +41,7 @@ def run_dms_simulator(settings, callback, stop_event):
 
     for val in generate_values():
         if (val):
-            callback(None)
-            send_measurement(1, settings)
+            callback(val, settings)
         if stop_event.is_set():
             break
         time.sleep(2)

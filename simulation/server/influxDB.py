@@ -11,10 +11,14 @@ from settings import load_settings
 app = Flask(__name__)
 
 # InfluxDB Configuration
-token = "T4haMiCWLq7vaga61f2oXIczOF2bHcAJNfk07am0VnzQVnU4CdigDz3VMfPBWJjX4hV1HYgLDiQn0--AwWKUSA=="
-org = "ftn"
+# token = "T4haMiCWLq7vaga61f2oXIczOF2bHcAJNfk07am0VnzQVnU4CdigDz3VMfPBWJjX4hV1HYgLDiQn0--AwWKUSA=="
+# org = "ftn"
+# url = "http://localhost:8086"
+# bucket = "iot_bucket"
+token = "BPCVCNlJc-Bur7wE8JfljdQ3xQk9ERVIsunqWo-DbxRjMCIwy90sRMlWu94wA56ATrsSUCxKW_XOKNNAfCixdQ=="
+org = "my-influx"
 url = "http://localhost:8086"
-bucket = "iot_bucket"
+bucket = "iot"
 influxdb_client = InfluxDBClient(url=url, token=token, org=org)
 
 # MQTT Configuration

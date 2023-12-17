@@ -2,20 +2,20 @@ import RPi.GPIO as GPIO
 import time
 
 
-def readLine(line, characters, c_tuple, callback):
+def readLine(line, characters, c_tuple, callback, settings):
     GPIO.output(line, GPIO.HIGH)
     if(GPIO.input(c_tuple[0]) == 1):
         print(characters[0])
-        callback(characters[0])
-    if(GPIO.input(c_tuple[1]) == 1):
-        print(characters[1])
-        callback(characters[1])
-    if(GPIO.input(c_tuple[2]) == 1):
-        print(characters[2])
-        callback(characters[2])
-    if(GPIO.input(c_tuple[3]) == 1):
-        print(characters[3])
-        callback(characters[3])
+        callback(characters[0], settings)
+    # if(GPIO.input(c_tuple[1]) == 1):
+    #     print(characters[1])
+    #     callback(characters[1])
+    # if(GPIO.input(c_tuple[2]) == 1):
+    #     print(characters[2])
+    #     callback(characters[2])
+    # if(GPIO.input(c_tuple[3]) == 1):
+    #     print(characters[3])
+    #     callback(characters[3])
     GPIO.output(line, GPIO.LOW)
 
 
@@ -48,11 +48,11 @@ def run_dms_loop(settings, callback, stop_event):
 
 
     while True:
-        readLine(R1, ["1","2","3","A"], c_tuple, callback)
-        readLine(R2, ["4","5","6","B"], c_tuple, callback)
-        readLine(R3, ["7","8","9","C"], c_tuple, callback)
-        readLine(R4, ["*","0","#","D"], c_tuple, callback)
-        time.sleep(0.2)
+        readLine(R1, ["1","2","3","A"], c_tuple, callback, settings)
+        readLine(R2, ["4","5","6","B"], c_tuple, callback, settings)
+        readLine(R3, ["7","8","9","C"], c_tuple, callback, settings)
+        readLine(R4, ["*","0","#","D"], c_tuple, callback, settings)
+        time.sleep(2)
 
         if stop_event.is_set():
             return
