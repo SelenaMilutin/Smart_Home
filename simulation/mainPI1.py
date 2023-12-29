@@ -8,10 +8,7 @@ from components.dms import run_dms
 from components.light import run_light
 from components.pir import run_pir
 import time
-
 from components.buzzer import run_buzzer
-
-
 
 
 

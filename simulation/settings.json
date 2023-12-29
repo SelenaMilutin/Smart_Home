@@ -89,5 +89,94 @@
         "name": "DB",
         "measurement": ["buzz"],
         "topic": ["buzz-DB"]
+    },
+    "DS2": {
+        "simulated": true,
+        "pin": 17,
+        "runs_on": "PI2",
+        "name": "DS2",
+        "measurement": ["motion"],
+        "topic": ["motion-DS2"]
+    },
+    "DUS2": {
+        "simulated": true,
+        "pin_trig": 17,
+        "pin_echo": 17,
+        "runs_on": "PI2",
+        "name": "DUS2",
+        "measurement": ["distance"],
+        "topic": ["distance-DUS2"]
+    },
+    "DPIR2": {
+        "simulated": true,
+        "pin": 17,
+        "runs_on": "PI2",
+        "name": "DPIR2",
+        "measurement": ["realised"],
+        "topic": ["realised-DPIR2"]
+    },
+    "GDHT": {
+        "simulated": true,
+        "pin": 27,
+        "runs_on": "PI2",
+        "name": "GDHT",
+        "measurement": ["temperature", "humidity"],
+        "topic": ["temperature-GDHT", "humidity-GDHT"]
+    },
+    "GLCD": {
+        "simulated": true,
+        "pin": 27,
+        "runs_on": "PI2",
+        "name": "GLCD",
+        "measurement": ["display"],
+        "topic": ["display-GLCD"]
+    },
+    "GSG": {
+        "simulated": true,
+        "pin": 27,
+        "runs_on": "PI2",
+        "name": "GSG",
+        "measurement": ["rotation", "acceleration"],
+        "topic": ["rotation", "acceleration"]
+    },
+    "RPIR3": {
+        "simulated": true,
+        "pin": 17,
+        "runs_on": "PI2",
+        "name": "RPIR3",
+        "measurement": ["realised"],
+        "topic": ["realised-RPIR3"]
+    },
+    "RDHT3": {
+        "simulated": true,
+        "pin": 27,
+        "runs_on": "PI2",
+        "name": "RDHT3",
+        "measurement": ["temperature", "humidity"],
+        "topic": ["temperature-RDHT3", "humidity-RDHT3"]
+    },
+    "RPIR4": {
+        "simulated": true,
+        "pin": 17,
+        "runs_on": "PI3",
+        "name": "RPIR4",
+        "measurement": ["realised"],
+        "topic": ["realised-RPIR4"]
+    },
+    "RDHT4": {
+        "simulated": true,
+        "pin": 27,
+        "runs_on": "PI3",
+        "name": "RDHT4",
+        "measurement": ["temperature", "humidity"],
+        "topic": ["temperature-RDHT4", "humidity-RDHT4"]
+    },
+    "BB": {
+        "simulated": true,
+        "pin": 4,
+        "runs_on": "PI3",
+        "name": "BB",
+        "measurement": ["buzz"],
+        "topic": ["buzz-BB"]
     }
 }
