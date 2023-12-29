@@ -1,7 +1,6 @@
 import RPi.GPIO as GPIO
 import time
 
-from server.messenger_sender import send_measurement
 
 
 def get_distance(pin_echo, pin_trig):
@@ -34,7 +33,7 @@ def get_distance(pin_echo, pin_trig):
     return distance
 
 
-def run_dus_loop(settings, callback, stop_event):
+def run_dus_loop(settings, callback, stop_event, publish_event):
     pin_trig =settings['pin_trig']
     pin_echo = settings['pin_echo']
     GPIO.setmode(GPIO.BCM)
@@ -43,8 +42,7 @@ def run_dus_loop(settings, callback, stop_event):
 
     while True:
         val = get_distance(pin_echo, pin_trig)
-        callback(val)
-        send_measurement(val, settings)
+        callback(val, settings, publish_event)
         if stop_event.is_set():
             return
 

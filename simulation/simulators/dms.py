@@ -3,7 +3,6 @@ import time
 import random
 # import keyboard
 
-from server.messenger_sender import send_measurement
 
 
 # def on_key_event_wrapper(callback):
@@ -31,7 +30,7 @@ def generate_values():
             rnd = random.randint(0, 1)
             yield rnd
 
-def run_dms_simulator(settings, callback, stop_event):
+def run_dms_simulator(settings, callback, stop_event, publish_event):
     
     # keyboard.hook(on_key_event_wrapper(callback))
     # while True:
@@ -41,7 +40,7 @@ def run_dms_simulator(settings, callback, stop_event):
 
     for val in generate_values():
         if (val):
-            callback(val, settings)
+            callback(val, settings, publish_event)
         if stop_event.is_set():
             break
         time.sleep(2)

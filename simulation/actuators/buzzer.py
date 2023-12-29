@@ -2,13 +2,14 @@ import time
 from pynput import keyboard
 from functools import partial
 
-from server.messenger_sender import send_measurement
 
 # def ctrl(letter): return chr(ord(letter.upper())-64)
 
 
 
-def on_press_real(port, settings, key):
+def on_press_real(port, settings, key, callback, publish_event):
+    import RPi.GPIO as GPIO
+
     if key == keyboard.Key.space:
         # print("jsjs")
         try:
@@ -23,26 +24,26 @@ def on_press_real(port, settings, key):
                 GPIO.output(port, False)
                 time.sleep(delay)
             print("Buzzzz")
-            send_measurement(1, settings)
+            callback(1, settings, publish_event)
         except IOError:
             print("Error")
     
-def on_release_real(port, settings, key):
+def on_release_real(port, settings, key, callback, publish_event):
     print(port)
     if key == keyboard.Key.space:
         print("No more buzz")
-        send_measurement(0, settings)
+        callback(0, settings, publish_event)
     if key == keyboard.Key.ctrl_l:
         keyboard.Listener.stop
         print("ugasena je tastatura")
         return False
 
         
-def run_buzz_legit(settings, stop_event):
+def run_buzz_legit(settings, stop_event, publish_event, callback):
     # print("alelelele")
     port = settings['pin']
-    import RPi.GPIO as GPI
+    import RPi.GPIO as GPIO
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(port, GPIO.OUT)
-    with keyboard.Listener(on_press=partial(on_press_real, port, settings), on_release=partial(on_release_real, port, settings)) as listener:
+    with keyboard.Listener(on_press=partial(on_press_real, port, settings,callback, publish_event), on_release=partial(on_release_real, port, settings, callback, publish_event)) as listener:
         listener.join()

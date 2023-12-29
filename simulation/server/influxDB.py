@@ -4,26 +4,26 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqtt
 import json
 import sys
+
 sys.path.append("../")
 from settings import load_settings
+from broker_settings import HOSTNAME, PORT, INFLUX_TOKEN, BUCKET, ORG
+
 
 
 app = Flask(__name__)
 
-# InfluxDB Configuration
-# token = "T4haMiCWLq7vaga61f2oXIczOF2bHcAJNfk07am0VnzQVnU4CdigDz3VMfPBWJjX4hV1HYgLDiQn0--AwWKUSA=="
-# org = "ftn"
-# url = "http://localhost:8086"
-# bucket = "iot_bucket"
-token = "BPCVCNlJc-Bur7wE8JfljdQ3xQk9ERVIsunqWo-DbxRjMCIwy90sRMlWu94wA56ATrsSUCxKW_XOKNNAfCixdQ=="
-org = "my-influx"
-url = "http://localhost:8086"
-bucket = "iot"
-influxdb_client = InfluxDBClient(url=url, token=token, org=org)
+
+url = f"http://{HOSTNAME}:8086"
+# url = "http://10.1.121.45:8086"
+
+influxdb_client = InfluxDBClient(url=url, token=INFLUX_TOKEN, org=ORG)
 
 # MQTT Configuration
 mqtt_client = mqtt.Client()
-mqtt_client.connect("localhost", 1883, 60)
+mqtt_client.connect(HOSTNAME, PORT, 60)
+# mqtt_client.connect("10.1.121.102", 1883, 60)
+
 mqtt_client.loop_start()
 
 def on_connect(client, userdata, flags, rc): #subscribe na topike
@@ -43,6 +43,7 @@ mqtt_client.on_message = on_message
 
 
 def save_to_db(data):
+    print("zasto")
     print(data)
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
     point = (
@@ -52,7 +53,7 @@ def save_to_db(data):
         .tag("name", data["name"])
         .field("value", data["value"])
     )
-    write_api.write(bucket=bucket, org=org, record=point)
+    write_api.write(bucket=BUCKET, org=ORG, record=point)
 
 
 # # Route to store dummy data

@@ -1,7 +1,7 @@
 {
     "RDHT1": {
         "simulated": true,
-        "pin": 17,
+        "pin": 27,
         "runs_on": "PI1",
         "name": "RDHT1",
         "measurement": ["temperature", "humidity"],
@@ -84,7 +84,7 @@
     },
     "DB": {
         "simulated": true,
-        "pin": 17,
+        "pin": 4,
         "runs_on": "PI1",
         "name": "DB",
         "measurement": ["buzz"],
