@@ -1,0 +1,12 @@
+<div class="section">
+    <h1>All PI Devices</h1>
+    <mat-divider></mat-divider>
+    <div class="card-container">
+        <div *ngFor="let pi of pies">
+            <div class="card" (click)="navigateToPiDevices(pi)">
+                <p>{{pi.name}}</p>
+                <img class="img-card" [src]="" alt="{{pi.name}}">
+            </div>
+        </div>
+    </div>
+</div>

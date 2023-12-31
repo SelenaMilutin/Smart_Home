@@ -4,6 +4,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqtt
 import json
 import sys
+from flask_cors import CORS
 
 sys.path.append("../")
 from settings import load_settings
@@ -12,7 +13,7 @@ from broker_settings import HOSTNAME, PORT, INFLUX_TOKEN, BUCKET, ORG
 
 
 app = Flask(__name__)
-
+CORS(app)
 
 url = f"http://{HOSTNAME}:8086"
 # url = "http://10.1.121.45:8086"
@@ -97,6 +98,24 @@ def save_to_db(data):
 #     |> filter(fn: (r) => r._measurement == "{request.args.get("measurement")}")
 #     |> mean()"""
 #     return handle_influx_query(query)
+    
+@app.route('/component/<piName>', methods=['GET'])
+def retrieve_aggregate_data(piName):
+    devices = []
+    settings = load_settings(filePath='../settings.json')
+    for device in settings:
+        if settings[device]['runs_on'] == piName:
+            devices.append({
+                'code': device,
+                'simulated': settings[device]['simulated'],
+                'runsOn': settings[device]['runs_on'],
+                'name': settings[device]['name'],
+                'measurement': settings[device]['measurement'],
+                'topic': settings[device]['topic']
+            })
+    # print(jsonify(devices))
+    return jsonify(devices)
+
 
 
 if __name__ == '__main__':

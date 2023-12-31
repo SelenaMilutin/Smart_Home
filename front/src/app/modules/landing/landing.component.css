@@ -1,0 +1,41 @@
+.card-container {
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;   
+    border-radius: 8px;
+    background-color: #ffffff00 !important;
+    flex-wrap: wrap;
+}
+
+.card {
+    flex: 0 0 auto;
+    width: 13vw;
+    height: 10vw;
+    margin: 20px;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.423);
+    cursor: pointer;
+}
+.card .img-card {
+    width: 13vw;
+    height: 8vw;
+    border-radius: 20px;
+}
+
+p {
+    font-size: 1.1em;
+    font-family: 'Sora-regular', Roboto, "Helvetica Neue", sans-serif !important; 
+    padding-top: 15px;
+    margin-bottom: 5px !important;
+    padding-left: 1vw;
+}
+
+
+.page {
+    margin: 1%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+}

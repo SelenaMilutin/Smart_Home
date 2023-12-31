@@ -15,3 +15,14 @@
 
 #virtuelna
 venv/
+
+# Compiled output
+front/dist
+front/tmp
+front/out-tsc
+front/bazel-out
+
+# Node
+front/node_modules
+npm-debug.log
+yarn-error.log
