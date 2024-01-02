@@ -178,5 +178,30 @@
         "name": "BB",
         "measurement": ["buzz"],
         "topic": ["buzz-BB"]
+    }, 
+    "B4SD": {
+        "simulated": true,
+        "pin": 4,
+        "runs_on": "PI3",
+        "name": "B4SD",
+        "measurement": ["time"],
+        "topic": ["time-B4SD"]
+    },
+    "BIR": {
+        "simulated": true,
+        "pin": 4,
+        "runs_on": "PI3",
+        "name": "BIR",
+        "measurement": ["infrared"],
+        "topic": ["infrared-BIR"]
+    },
+    "BRGB": {
+        "simulated": true,
+        "pin": 17,
+        "on": true,
+        "runs_on": "PI3",
+        "name": "BRGB",
+        "measurement": ["rgb"],
+        "topic": ["rgb-BRGB"]
     }
 }
