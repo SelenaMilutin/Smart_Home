@@ -1,0 +1,24 @@
+.toolbar {
+    background-color: #2C3E50;
+    color: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    margin: 6px;
+}
+
+.toolbar > * {
+    margin-left: 20px;
+}
+
+
+h2, a {
+    color: rgb(232, 232, 232); 
+}
+
+::ng-deep body {
+    font-family: sans-serif !important;
+    margin: 0 !important;
+    padding: 0;
+}
