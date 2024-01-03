@@ -41,10 +41,10 @@ if __name__ == "__main__":
         # run_pir(rpir1_setings, threads, stop_event, "room")
         # rpir2_setings = settings["RPIR2"]
         # run_pir(rpir2_setings, threads, stop_event, "room")
-        dpir1_setings = settings["DPIR1"]
-        run_pir(dpir1_setings, threads, stop_event, "door", isDPIR1 = True)
-        # buzzer_setings = settings["DB"]
-        # run_buzzer(buzzer_setings, threads, stop_event)
+        # dpir1_setings = settings["DPIR1"]
+        # run_pir(dpir1_setings, threads, stop_event, "door", isDPIR1 = True)
+        buzzer_setings = settings["DB"]
+        run_buzzer(buzzer_setings, threads, stop_event)
         while True:
             time.sleep(1)
 

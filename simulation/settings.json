@@ -87,6 +87,7 @@
         "simulated": true,
         "pin": 4,
         "runs_on": "PI1",
+        "on": false,
         "name": "DB",
         "measurement": ["buzz"],
         "topic": ["buzz-DB"]
@@ -176,6 +177,7 @@
         "simulated": true,
         "pin": 4,
         "runs_on": "PI3",
+        "on": false,
         "name": "BB",
         "measurement": ["buzz"],
         "topic": ["buzz-BB"]

@@ -14,14 +14,16 @@
     margin: 20px;
     border-radius: 20px;
     padding: 10px;
-    background-color: rgb(255, 255, 255);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.423);
+    background-color: rgb(61, 64, 70);
+    box-shadow: 0 4px 8px rgba(29, 29, 29, 0.423);
     cursor: pointer;
     transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: center;
 }
 
 .card:hover {
-    background-color: #ecf0f1; 
+    background-color: rgb(80, 83, 92);
 }
 
 .section {
@@ -49,7 +51,9 @@ h2, a {
 }
 
 .card-container p {
-    padding-left: 1vw;
+    font-size: larger;
+    font-weight: bold;
+    letter-spacing: 2px;
 }
 
 iframe {

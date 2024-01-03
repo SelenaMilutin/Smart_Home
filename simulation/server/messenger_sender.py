@@ -43,4 +43,13 @@ def generate_payload(value, settings, topic_num=0):
     temperature_payload = json.dumps(payload)
     return temperature_payload
         
-
+def generate_alarm_payload(value, settings, topic_num=0):
+    payload = {
+        "measurement": "alarm-activation",
+        "value": value,
+        "simulated": settings["simulated"],
+        "name": settings["name"],
+        "runs_on": settings["runs_on"]
+    }
+    temperature_payload = json.dumps(payload)
+    return temperature_payload

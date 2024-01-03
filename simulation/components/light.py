@@ -10,7 +10,6 @@ sys.path.append("../")
 import paho.mqtt.client as mqtt
 from broker_settings import HOSTNAME, PORT
 
-param_settings = None
 dht_batch = []
 publish_data_counter = 0
 publish_data_limit = 5
@@ -61,11 +60,12 @@ def on_message(client, userdata, msg):
     global param_settings
     decoded = msg.payload.decode('utf-8')
     if decoded == "on":
-        print("MESSAGE LIGHT {val} RECEIVED IN LIGHT")
+        print("MESSAGE LIGHT on RECEIVED IN LIGHT")
         param_settings['on'] = True
         time.sleep(10)
         param_settings['on'] = False
 
+param_settings = None
 
 def run_light(settings, threads, stop_event):
     global param_settings

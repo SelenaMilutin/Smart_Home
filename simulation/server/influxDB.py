@@ -33,6 +33,7 @@ def on_connect(client, userdata, flags, rc): #subscribe na topike
     for device in settings:
         for topic in settings[device]["topic"]:
             client.subscribe(topic)
+    client.subscribe("alarmmm")
 
 mqtt_client.on_connect = on_connect
 
