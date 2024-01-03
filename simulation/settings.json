@@ -28,7 +28,7 @@
     "DL": {
         "simulated": true,
         "pin": 17,
-        "on": true,
+        "on": false,
         "runs_on": "PI1",
         "name": "DL",
         "measurement": ["light"],
@@ -80,7 +80,8 @@
         "runs_on": "PI1",
         "name": "DPIR1",
         "measurement": ["realised"],
-        "topic": ["realised-DPIR1"]
+        "topic": ["realised-DPIR1"],
+        "isDoor": true
     },
     "DB": {
         "simulated": true,

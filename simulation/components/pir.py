@@ -53,11 +53,12 @@ def callback_room_pir(settings, publish_event, verbose = False):
         publish_event.set()
 
 
-def callback_door_pir(settings, publish_event, verbose = False):
+def callback_door_pir(settings, publish_event, isDPIR1 = False, verbose = False):
     global publish_data_counter, publish_data_limit
     if verbose:
         # t = time.localtime()
         print("DOOR PASSIVE INFRARED SENSOR")
+        print(settings["name"])
         print("="*20)
         # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
         # print(f"Motion detected in room")
@@ -69,10 +70,15 @@ def callback_door_pir(settings, publish_event, verbose = False):
     if publish_data_counter >= publish_data_limit:
         publish_event.set()
 
+    if isDPIR1:
+        print("ITS DOOR PIR 1")
+        publish.single("dl", "on", hostname=HOSTNAME, port=PORT)
 
-def run_pir(settings, threads, stop_event, location):
+
+
+def run_pir(settings, threads, stop_event, location, isDPIR1 = False):
         if settings['simulated']:
-            print("Starting ds1 sumilator")
+            print("Starting pir simulator")
             if location == "room":
                 rpir_thread = threading.Thread(target = run_pir_simulator, args=(settings, callback_room_pir, stop_event, publish_event))
             else:
@@ -82,7 +88,7 @@ def run_pir(settings, threads, stop_event, location):
             print("Rpir1 sumilator started")
         else:
             from sensors.pir import run_pir_loop
-            print("Starting rpir1 loop")
+            print("Starting pir loop")
             if location == "room":
                 rpir_thread = threading.Thread(target=run_pir_loop, args=(settings, callback_room_pir, stop_event, publish_event))
             else:

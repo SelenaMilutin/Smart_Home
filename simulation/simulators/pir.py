@@ -9,10 +9,12 @@ def generate_values():
       
 
 def run_pir_simulator(settings, callback, stop_event, publish_event):
-    for pressed in generate_values():
-        if pressed:
-            callback(settings, publish_event)
+    for detected in generate_values():
+        if detected:
+            # callback(settings, publish_event)
+            isDPIR1 = True if settings.get("isDoor") != None and settings.get("isDoor") else False
+            callback(settings, publish_event, isDPIR1=isDPIR1, verbose=True)
         if stop_event.is_set():
             break
-        time.sleep(2)
+        time.sleep(7)
               
