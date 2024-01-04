@@ -201,7 +201,9 @@
     },
     "BRGB": {
         "simulated": true,
-        "pin": 17,
+        "pin-r": 17,
+        "pin-g": 17,
+        "pin-b": 17,
         "on": 0,
         "val": "0",
         "runs_on": "PI3",
