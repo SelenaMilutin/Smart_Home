@@ -1,11 +1,11 @@
 import time
 
 # GPIO ports for the 7seg pins
-segments =  (11,4,23,8,7,10,18,25)
+# segments =  (11,4,23,8,7,10,18,25)
 # 7seg_segment_pins (11,7,4,2,1,10,5,3) +  100R inline
  
 # GPIO ports for the digit 0-3 pins 
-digits = (22,27,17,24)
+# digits = (22,27,17,24)
 # 7seg_digit_pins (12,9,8,6) digits 0-3 respectively
  
 num = {' ':(0,0,0,0,0,0,0),
@@ -23,6 +23,9 @@ num = {' ':(0,0,0,0,0,0,0),
 def run_display_loop(settings, callback, stop_event):
     import RPi.GPIO as GPIO
     GPIO.setmode(GPIO.BCM)
+
+    segments = settings["segments"]
+    digits = settings["digits"]
 
     for segment in segments:
         GPIO.setup(segment, GPIO.OUT)

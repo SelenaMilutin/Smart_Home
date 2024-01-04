@@ -5,6 +5,7 @@ from components.dht import run_dht
 from components.pir import run_pir
 from components.buzzer import run_buzzer
 import time
+from simulation.components.bir import run_bir
 
 from simulation.components.display4D7S import run_4D7Sdisplay
 
@@ -30,6 +31,8 @@ if __name__ == "__main__":
         # run_buzzer(buzzer_setings, threads, stop_event)
         display4D7s_settings = settings["B4SD"]
         run_4D7Sdisplay(display4D7s_settings, threads, stop_event)
+        bir_settings = settings["BIR"]
+        run_bir(bir_settings, threads, stop_event)
         # light_settings = settings["DL"]
         # run_light(light_settings, threads, stop_event)
         while True:
