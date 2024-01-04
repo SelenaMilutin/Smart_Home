@@ -7,10 +7,10 @@
 #------------------------------------------------------------#
 from datetime import datetime
 import time
-import paho.mqtt.client as mqtt
 import paho.mqtt.publish as publish
 
 from simulation.broker_settings import HOSTNAME, PORT
+from simulation.mqtt_topics import RGB_TOPIC
 
 pin = 0
 Buttons = [0x300ff22dd, 0x300ffc23d, 0x300ff629d, 0x300ffa857, 0x300ff9867, 0x300ffb04f, 0x300ff6897, 0x300ff02fd, 0x300ff30cf, 0x300ff18e7, 0x300ff7a85, 0x300ff10ef, 0x300ff38c7, 0x300ff5aa5, 0x300ff42bd, 0x300ff4ab5, 0x300ff52ad]  # HEX code list
@@ -93,4 +93,4 @@ def run_bir_loop(settings, callback, stop_event, publish_event):
                     val = int(button_name)
                     callback(val, settings, True)
                     # For communication to BGR
-                    publish.single("bir", val, hostname=HOSTNAME, port=PORT)
+                    publish.single(RGB_TOPIC, val, hostname=HOSTNAME, port=PORT)

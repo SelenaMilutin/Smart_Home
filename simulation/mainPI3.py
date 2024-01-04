@@ -8,6 +8,7 @@ import time
 from simulation.components.bir import run_bir
 
 from simulation.components.display4D7S import run_4D7Sdisplay
+from simulation.components.rgb import run_rgb
 
 
 try:
@@ -29,12 +30,12 @@ if __name__ == "__main__":
         # run_dht(dht1_settings, threads, stop_event)
         # buzzer_setings = settings["BB"]
         # run_buzzer(buzzer_setings, threads, stop_event)
-        display4D7s_settings = settings["B4SD"]
-        run_4D7Sdisplay(display4D7s_settings, threads, stop_event)
+        # display4D7s_settings = settings["B4SD"]
+        # run_4D7Sdisplay(display4D7s_settings, threads, stop_event)
         bir_settings = settings["BIR"]
         run_bir(bir_settings, threads, stop_event)
-        # light_settings = settings["DL"]
-        # run_light(light_settings, threads, stop_event)
+        rgb_settings = settings["BRGB"]
+        run_rgb(rgb_settings, threads, stop_event)
         while True:
             time.sleep(1)
 

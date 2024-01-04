@@ -1,6 +1,7 @@
 
 
 import sys
+from simulation.mqtt_topics import DOOR_LIGHT_TOPIC
 from simulators.pir import run_pir_simulator
 import threading
 import time
@@ -72,7 +73,7 @@ def callback_door_pir(settings, publish_event, isDPIR1 = False, verbose = False)
 
     if isDPIR1:
         print("ITS DOOR PIR 1")
-        publish.single("dl", "on", hostname=HOSTNAME, port=PORT)
+        publish.single(DOOR_LIGHT_TOPIC, "on", hostname=HOSTNAME, port=PORT)
 
 
 

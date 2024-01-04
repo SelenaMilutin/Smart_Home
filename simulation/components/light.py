@@ -3,6 +3,7 @@
 import sys
 import time
 from server.messenger_sender import generate_payload
+from simulation.mqtt_topics import DOOR_LIGHT_TOPIC
 from simulators.light import run_light_simulator
 import threading
 import paho.mqtt.publish as publish
@@ -53,7 +54,7 @@ def callback(val, settings, publish_event, verbose = False):
         publish_event.set()
 
 def on_connect(client, userdata, flags, rc): 
-    client.subscribe("dl")
+    client.subscribe(DOOR_LIGHT_TOPIC)
 
 
 def on_message(client, userdata, msg):
