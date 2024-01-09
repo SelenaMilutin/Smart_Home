@@ -6,6 +6,16 @@ from datetime import datetime
 from components.lcd.Adafruit_LCD1602 import Adafruit_CharLCD
 
 from components.lcd.PCF8574 import PCF8574_GPIO
+import json
+import sys
+import paho.mqtt.client as mqtt
+
+
+sys.path.append("../")
+from broker_settings import HOSTNAME, PORT
+
+humidity = 0
+temp = 0
  
 def get_cpu_temp():     # get CPU temperature and store it into file "/sys/class/thermal/thermal_zone0/temp"
     tmp = open('/sys/class/thermal/thermal_zone0/temp')
@@ -25,6 +35,45 @@ def loop():
         lcd.message( 'CPU: ' + get_cpu_temp()+'\n' )# display CPU temperature
         lcd.message( get_time_now() )   # display the time
         sleep(1)
+
+
+def poject_loop(settings, callback, stop_event):
+    mqtt_client = mqtt.Client()
+    mqtt_client.connect(HOSTNAME, PORT, 60)
+    mcp.output(3,1)     # turn on LCD backlight
+    lcd.begin(16,2)
+
+    mqtt_client.loop_start()
+
+    def on_connect(client, userdata, flags, rc): #subscribe na topike
+        client.subscribe("temperature-GDHT")
+        client.subscribe("humidity-GDHT")
+
+    mqtt_client.on_connect = on_connect
+
+    def on_message(client, userdata, msg):
+        global humidity, temp
+
+        # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        data = json.loads(msg.payload.decode('utf-8'))
+        if data["measurement"] == "temperature":
+            humidity = data["value"]
+        if data["measurement"] == "humidity":
+            temp = data["value"]
+        callback(humidity, temp, settings, True)
+        lcd.setCursor(0,0)  # set cursor position
+        lcd.message( 'Humidity: ' + humidity +'\n' )# display CPU temperature
+        lcd.message( 'Temperature: ' + temp )   # display the time
+
+    mqtt_client.on_message = on_message
+
+
+def run_display_loop(settings, display_callback, stop_event):
+    try:
+        poject_loop(settings, display_callback, stop_event)
+    except KeyboardInterrupt:
+        destroy()
+
         
 def destroy():
     lcd.clear()

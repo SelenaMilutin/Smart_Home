@@ -9,6 +9,7 @@ from components.light import run_light
 from components.pir import run_pir
 import time
 from components.gyro import run_gyro
+from components.lcd import run_LCDdisplay
 
 
 
@@ -27,6 +28,14 @@ if __name__ == "__main__":
     try:
         gyro_setings = settings["GSG"]
         run_gyro(gyro_setings, threads, stop_event)
+
+        garage_dht_settings = settings["GDHT"]
+        run_dht(garage_dht_settings, threads, stop_event)
+
+
+        garage_lcd_settings = settings["GLCD"]
+        run_LCDdisplay(garage_lcd_settings, threads, stop_event)  
+
         while True:
             time.sleep(1)
 
