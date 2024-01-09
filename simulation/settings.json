@@ -28,7 +28,7 @@
     "DL": {
         "simulated": true,
         "pin": 17,
-        "on": true,
+        "on": false,
         "runs_on": "PI1",
         "name": "DL",
         "measurement": ["light"],
@@ -80,12 +80,14 @@
         "runs_on": "PI1",
         "name": "DPIR1",
         "measurement": ["realised"],
-        "topic": ["realised-DPIR1"]
+        "topic": ["realised-DPIR1"],
+        "isDoor": true
     },
     "DB": {
         "simulated": true,
         "pin": 4,
         "runs_on": "PI1",
+        "on": false,
         "name": "DB",
         "measurement": ["buzz"],
         "topic": ["buzz-DB"]
@@ -175,8 +177,38 @@
         "simulated": true,
         "pin": 4,
         "runs_on": "PI3",
+        "on": false,
         "name": "BB",
         "measurement": ["buzz"],
         "topic": ["buzz-BB"]
+    }, 
+    "B4SD": {
+        "simulated": true,
+        "runs_on": "PI3",
+        "segments": [11,4,23,8,7,10,18,25],
+        "digits": [22,27,17,24],
+        "name": "B4SD",
+        "topic": ["display-B4SD"]
+
+    },
+    "BIR": {
+        "simulated": true,
+        "pin": 4,
+        "runs_on": "PI3",
+        "name": "BIR",
+        "measurement": ["infrared"],
+        "topic": ["infrared-BIR"]
+    },
+    "BRGB": {
+        "simulated": true,
+        "pin-r": 17,
+        "pin-g": 17,
+        "pin-b": 17,
+        "on": 0,
+        "val": "0",
+        "runs_on": "PI3",
+        "name": "BRGB",
+        "measurement": ["rgb-value", "rgb-on"],
+        "topic": ["rgb-BRGB", "on-BRGB"]
     }
 }

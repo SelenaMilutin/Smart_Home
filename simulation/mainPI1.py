@@ -35,8 +35,8 @@ if __name__ == "__main__":
         run_dus(dus1_settings, threads, stop_event)
         # dms_settings = settings["DMS"]
         # run_dms(dms_settings, threads, stop_event)
-        # light_settings = settings["DL"]
-        # run_light(light_settings, threads, stop_event)
+        light_settings = settings["DL"]
+        run_light(light_settings, threads, stop_event)
         # rpir1_setings = settings["RPIR1"]
         # run_pir(rpir1_setings, threads, stop_event, "room")
         # rpir2_setings = settings["RPIR2"]

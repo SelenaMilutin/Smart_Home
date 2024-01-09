@@ -1,10 +1,12 @@
 import sys
 import paho.mqtt.publish as publish
 from server.messenger_sender import generate_payload
+from simulation.mqtt_topics import BUZZER_ALARM_TOPIC
 from simulators.buzzer import run_buzz_simulation
 import threading
 sys.path.append("../")
 from broker_settings import HOSTNAME, PORT
+import paho.mqtt.client as mqtt
 
 
 dht_batch = []
@@ -47,20 +49,42 @@ def callback(val, settings, publish_event, verbose = False):
     if publish_data_counter >= publish_data_limit:
         publish_event.set()
 
+def on_connect(client, userdata, flags, rc): 
+    client.subscribe(BUZZER_ALARM_TOPIC)
 
+def on_message(client, userdata, msg):
+    global param_settings
+    decoded = msg.payload.decode('utf-8')
+    if decoded == "activate":
+        print("MESSAGE activate ALARM RECEIVED IN BUZZER")
+        param_settings['on'] = True
+    if decoded == "deactivate":
+        print("MESSAGE deactivate ALARM RECEIVED IN BUZZER")
+        param_settings['on'] = False
+
+param_settings = None
      
 
 def run_buzzer(settings, threads, stop_event):
-        if settings['simulated']:
-            print("Starting buzz sumilator")
-            buzz_thread = threading.Thread(target = run_buzz_simulation, args=(settings, callback, stop_event, publish_event))
-            buzz_thread.start()
-            threads.append(buzz_thread)
-            print("Buzz sumilator started")
-        else:
-            from actuators.buzzer import run_buzz_legit
-            print("Starting Buzz loop")
-            buzz_thread = threading.Thread(target=run_buzz_legit, args=(settings, stop_event, publish_event, callback))
-            buzz_thread.start()
-            threads.append(buzz_thread)
-            print("Buzz loop started")
+
+    global param_settings
+    param_settings = settings
+    mqtt_client = mqtt.Client()
+    mqtt_client.connect(HOSTNAME, PORT, 60)
+    mqtt_client.on_connect = on_connect
+    mqtt_client.on_message = on_message
+    mqtt_client.loop_start()
+
+    if settings['simulated']:
+        print("Starting buzz sumilator")
+        buzz_thread = threading.Thread(target = run_buzz_simulation, args=(param_settings, callback, stop_event, publish_event))
+        buzz_thread.start()
+        threads.append(buzz_thread)
+        print("Buzz sumilator started")
+    else:
+        from actuators.buzzer import run_buzz_legit
+        print("Starting Buzz loop")
+        buzz_thread = threading.Thread(target=run_buzz_legit, args=(param_settings, stop_event, publish_event, callback))
+        buzz_thread.start()
+        threads.append(buzz_thread)
+        print("Buzz loop started")

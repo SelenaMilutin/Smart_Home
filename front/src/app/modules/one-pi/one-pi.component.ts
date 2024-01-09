@@ -29,7 +29,8 @@ export class OnePiComponent implements OnInit {
   }
 
   getSanitizedUrl(): SafeResourceUrl {
-    const url = 'http://localhost:3000/d/e1deea5f-5dc6-4647-b974-d04ef94fd431/iot?orgId=1&refresh=10s';
+    // const url = 'http://localhost:3000/d/e1deea5f-5dc6-4647-b974-d04ef94fd431/iot?orgId=1&refresh=10s';
+    const url = this.piService.panelLinks[this.piName]
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 

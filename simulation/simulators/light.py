@@ -5,6 +5,7 @@ import time
 from pynput import keyboard
 
 
+
 def on_press(key, settings, publish_event, callback):
     # print(key)
     if key == "x03":
@@ -34,8 +35,7 @@ def loop_function(settings, stop_event, publish_event, callback):
         if stop_event.is_set():
             keyboard.Listener.stop
             return
-        time.sleep(1)
-
+        time.sleep(5)
 
 def run_light_simulator(settings, callback, stop_event, publish_event):
     loop_thread = threading.Thread(target=loop_function, args=(settings, stop_event, publish_event, callback))
