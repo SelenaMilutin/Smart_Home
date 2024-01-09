@@ -62,6 +62,7 @@ def callback_door_pir(settings, publish_event, verbose = False):
         # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
         # print(f"Motion detected in room")
     button_payload = generate_payload(1, settings)
+    # data = get_data_by_time_measurment_device_name("5s", "distance", "DUS" + settings["name"][-1])
     with counter_lock:
         dht_batch.append((settings["topic"][0], button_payload, 0, True))
         publish_data_counter += 1

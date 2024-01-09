@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PI } from 'src/app/models/models';
 import { PiService } from '../service/pi.service';
 import { Router } from '@angular/router';
+import * as io from 'socket.io-client';
 
 @Component({
   selector: 'app-landing',
@@ -10,11 +11,14 @@ import { Router } from '@angular/router';
 })
 export class LandingComponent implements OnInit {
 
+  private socket: any;
 
   pies: PI[] = []
 
   constructor(private readonly piService:PiService,
-    private router: Router) { }
+    private router: Router) { 
+      
+    }
 
   ngOnInit(): void {
     this.pies = this.loadPies()

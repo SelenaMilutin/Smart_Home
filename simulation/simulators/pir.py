@@ -14,5 +14,5 @@ def run_pir_simulator(settings, callback, stop_event, publish_event):
             callback(settings, publish_event)
         if stop_event.is_set():
             break
-        time.sleep(2)
+        time.sleep(5)
               

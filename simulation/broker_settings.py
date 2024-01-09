@@ -1,5 +1,6 @@
 HOSTNAME = "localhost"
 PORT = 1883
+people_num = 0
 
 INFLUX_TOKEN = "T4haMiCWLq7vaga61f2oXIczOF2bHcAJNfk07am0VnzQVnU4CdigDz3VMfPBWJjX4hV1HYgLDiQn0--AwWKUSA=="
 ORG = "ftn"
