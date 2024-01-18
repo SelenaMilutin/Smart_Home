@@ -9,7 +9,7 @@ from flask_cors import CORS
 from queries import try_detection_DPIR, influxdb_client
 sys.path.append("../")
 from settings import load_settings, save_settings
-from broker_settings import HOSTNAME, PORT, INFLUX_TOKEN, BUCKET, ORG, people_num
+from broker_settings import HOSTNAME, PORT, INFLUX_TOKEN, BUCKET, ORG, people_num, INFLUXHOSTNAME
 
 
 
@@ -41,7 +41,7 @@ def on_connect(client, userdata, flags, rc): #subscribe na topike
 mqtt_client.on_connect = on_connect
 
 def on_message(client, userdata, msg):
-    # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     data = json.loads(msg.payload.decode('utf-8'))
     proces(data)
     save_to_db(data)

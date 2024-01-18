@@ -26,8 +26,8 @@ if __name__ == "__main__":
     threads = []
     stop_event = threading.Event()
     try:
-        gyro_setings = settings["GSG"]
-        run_gyro(gyro_setings, threads, stop_event)
+        # gyro_setings = settings["GSG"]
+        # run_gyro(gyro_setings, threads, stop_event)
 
         garage_dht_settings = settings["GDHT"]
         run_dht(garage_dht_settings, threads, stop_event)

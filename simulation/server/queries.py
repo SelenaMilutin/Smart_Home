@@ -4,9 +4,9 @@ from influxdb_client import InfluxDBClient
 import sys
 
 sys.path.append("../")
-from broker_settings import HOSTNAME, INFLUX_TOKEN, BUCKET, ORG
+from broker_settings import HOSTNAME, INFLUX_TOKEN, BUCKET, ORG, INFLUXHOSTNAME
 
-url = f"http://{HOSTNAME}:8086"
+url = f"http://{INFLUXHOSTNAME}:8086"
 # # url = "http://10.1.121.45:8086"
 
 influxdb_client = InfluxDBClient(url=url, token=INFLUX_TOKEN, org=ORG)

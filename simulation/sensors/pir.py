@@ -1,9 +1,9 @@
 import RPi.GPIO as GPIO
 import time
 
-def custom_callback(callback, settings, publish_event):
+def custom_callback(callback, settings, publish_event, isDPIR1=False, verbose=True):
     print(f"Callback wrapper with settings: {settings}")
-    callback(settings, publish_event)
+    callback(settings, publish_event, isDPIR1)
 
 def run_pir_loop(settings, callback, stop_event, publish_event):
     GPIO.setmode(GPIO.BCM)

@@ -27,7 +27,7 @@
     },
     "DL": {
         "simulated": true,
-        "pin": 17,
+        "pin": 18,
         "on": false,
         "runs_on": "PI1",
         "name": "DL",
@@ -75,8 +75,8 @@
         "topic": ["realised-RPIR2"]
     },
     "DPIR1": {
-        "simulated": true,
-        "pin": 17,
+        "simulated": false,
+        "pin": 16,
         "runs_on": "PI1",
         "name": "DPIR1",
         "measurement": ["realised"],
@@ -118,7 +118,7 @@
         "topic": ["realised-DPIR2"]
     },
     "GDHT": {
-        "simulated": true,
+        "simulated": false,
         "pin": 27,
         "runs_on": "PI2",
         "name": "GDHT",
@@ -126,7 +126,7 @@
         "topic": ["temperature-GDHT", "humidity-GDHT"]
     },
     "GLCD": {
-        "simulated": true,
+        "simulated": false,
         "pin": 27,
         "runs_on": "PI2",
         "name": "GLCD",
