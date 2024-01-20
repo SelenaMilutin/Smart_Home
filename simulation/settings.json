@@ -75,7 +75,7 @@
         "topic": ["realised-RPIR2"]
     },
     "DPIR1": {
-        "simulated": false,
+        "simulated": true,
         "pin": 16,
         "runs_on": "PI1",
         "name": "DPIR1",
