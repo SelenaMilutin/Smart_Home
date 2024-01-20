@@ -53,6 +53,8 @@ def activate_alarm(activate, simulated, component_name, runs_on, verbose = False
     if verbose:
         print(f"Alarm")
         print("="*20)
+    # if component_name == "DS1" or "DS2" and ! alarm system active: 
+        # return 
     publish_alarm(activate, simulated, component_name, runs_on)
     publish_to_buzzer(activate)
 

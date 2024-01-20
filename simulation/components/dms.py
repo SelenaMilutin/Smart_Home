@@ -11,7 +11,7 @@ from broker_settings import HOSTNAME, PORT
 
 dht_batch = []
 publish_data_counter = 0
-publish_data_limit = 5
+publish_data_limit = 3
 counter_lock = threading.Lock()
 
 def publisher_task(event, dht_batch):
@@ -41,15 +41,21 @@ def callback(pin_val, settings, publish_event, verbose = False):
         print("="*20)
         # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
         print(f"Entered pin {pin_val}")
-    if (pin_val == 1):
         # print(f"Activated")
-        button_payload = generate_payload(pin_val, settings)
-        with counter_lock:
-            dht_batch.append((settings["topic"][0], button_payload, 0, True))
-            publish_data_counter += 1
+    button_payload = generate_payload(pin_val, settings)
+    with counter_lock:
+        dht_batch.append((settings["topic"][0], button_payload, 0, True))
+        publish_data_counter += 1
 
-        if publish_data_counter >= publish_data_limit:
-            publish_event.set()
+    if publish_data_counter >= publish_data_limit:
+        publish_event.set()
+
+    # correct pin entered
+    if (pin_val == settings['pin']):
+        # activate alarm system
+        # deactivate alarm system
+        # deactivate alarm
+        return
 
 
 def run_dms(settings, threads, stop_event):

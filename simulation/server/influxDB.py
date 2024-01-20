@@ -6,7 +6,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqtt
 import json
 from flask_cors import CORS
-from queries import try_detection_DPIR, influxdb_client
+from queries import *
 sys.path.append("../")
 from settings import load_settings, save_settings
 from broker_settings import HOSTNAME, PORT, INFLUX_TOKEN, BUCKET, ORG, people_num, INFLUXHOSTNAME
@@ -146,6 +146,14 @@ def retrieve_aggregate_data(piName):
     # print(jsonify(devices))
     return jsonify(devices)
 
+@app.route('/alarm-system-activated/<pi_name>', methods=['GET'])
+def get_alarm_system_active(pi_name):
+    return jsonify(get_alarm_system_state("-1d", "alarm-system", pi_name))
+
+
+@app.route('/alarm-state/<pi_name>', methods=['GET'])
+def get_alarm_state_active(pi_name):
+    return jsonify(get_alarm_state("-1d", "alarm-activation", pi_name))
 
 
 if __name__ == '__main__':

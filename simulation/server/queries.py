@@ -71,7 +71,23 @@ def get_sef_movement():
         value += record.get("_value")
     return value < 100
     
+def get_alarm_system_state(time, measurement, device_name):
+    query = f"""from(bucket: "{BUCKET}")
+        |> range(start: -{time})
+        |> filter(fn: (r) => r._measurement == "{measurement}" and r["name"] == "{device_name}")
+        |> last()"""
+    returned = handle_influx_query(query)
+    data = returned.get("data")
+    return {"status": "success", "data": data}
 
+def get_alarm_state(time, measurement, device_name):
+    query = f"""from(bucket: "{BUCKET}")
+        |> range(start: -{time})
+        |> filter(fn: (r) => r._measurement == "{measurement}" and r["name"] == "{device_name}")
+        |> last()"""
+    returned = handle_influx_query(query)
+    data = returned.get("data")
+    return {"status": "success", "data": data}
 
 if __name__=="__main__":
     print(try_detection_DPIR())

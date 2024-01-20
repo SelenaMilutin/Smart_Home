@@ -53,10 +53,11 @@
         "C2": 16,
         "C3": 20,
         "C4": 21,
+        "pin": 1234,
         "runs_on": "PI1",
         "name": "DMS",
-        "measurement": ["pressed"],
-        "topic": ["pressed-DMS"]
+        "measurement": ["entered-pin"],
+        "topic": ["entered-pin-DMS"]
     },
     "RPIR1": {
         "simulated": true,
