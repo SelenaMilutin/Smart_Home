@@ -31,12 +31,12 @@ if __name__ == "__main__":
         # run_dht(dht2_settings, threads, stop_event)
         # ds1_setings = settings["DS1"]
         # run_ds(ds1_setings, threads, stop_event)
-        # dus1_settings = settings["DUS1"]
-        # run_dus(dus1_settings, threads, stop_event)
+        dus1_settings = settings["DUS1"]
+        run_dus(dus1_settings, threads, stop_event)
         # dms_settings = settings["DMS"]
         # run_dms(dms_settings, threads, stop_event)
-        light_settings = settings["DL"]
-        run_light(light_settings, threads, stop_event)
+        # light_settings = settings["DL"]
+        # run_light(light_settings, threads, stop_event)
         # rpir1_setings = settings["RPIR1"]
         # run_pir(rpir1_setings, threads, stop_event, "room")
         # rpir2_setings = settings["RPIR2"]

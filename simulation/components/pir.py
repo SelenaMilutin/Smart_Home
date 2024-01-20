@@ -13,7 +13,7 @@ from broker_settings import HOSTNAME, PORT
 
 dht_batch = []
 publish_data_counter = 0
-publish_data_limit = 5
+publish_data_limit = 2
 counter_lock = threading.Lock()
 
 def publisher_task(event, dht_batch):

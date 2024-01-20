@@ -31,7 +31,7 @@ def run_display_simulator(settings, callback, stop_event):
             humidity = data["value"]
         if data["measurement"] == "humidity":
             temp = data["value"]
-        callback(humidity, temp, settings, True)
+            callback(humidity, temp, settings, True)
 
     mqtt_client.on_message = on_message
       

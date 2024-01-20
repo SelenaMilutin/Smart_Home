@@ -10,6 +10,7 @@ from components.pir import run_pir
 import time
 from components.gyro import run_gyro
 from components.lcd import run_LCDdisplay
+from components.buzzer import run_buzzer
 
 
 
@@ -26,15 +27,22 @@ if __name__ == "__main__":
     threads = []
     stop_event = threading.Event()
     try:
+        buzzer_setings = settings["DB"]
+        run_buzzer(buzzer_setings, threads, stop_event)
+
+        button = settings["DS2"]
+        run_ds(button, threads, stop_event)
+
+
         # gyro_setings = settings["GSG"]
         # run_gyro(gyro_setings, threads, stop_event)
 
-        garage_dht_settings = settings["GDHT"]
-        run_dht(garage_dht_settings, threads, stop_event)
+        # garage_dht_settings = settings["GDHT"]
+        # run_dht(garage_dht_settings, threads, stop_event)
 
 
-        garage_lcd_settings = settings["GLCD"]
-        run_LCDdisplay(garage_lcd_settings, threads, stop_event)  
+        # garage_lcd_settings = settings["GLCD"]
+        # run_LCDdisplay(garage_lcd_settings, threads, stop_event)  
 
         while True:
             time.sleep(1)

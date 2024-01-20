@@ -6,7 +6,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqtt
 import json
 from flask_cors import CORS
-from queries import try_detection_DPIR, influxdb_client
+from queries import try_detection_DPIR, influxdb_client, try_detection_RPIR
 sys.path.append("../")
 from settings import load_settings, save_settings
 from broker_settings import HOSTNAME, PORT, INFLUX_TOKEN, BUCKET, ORG, people_num, INFLUXHOSTNAME
@@ -31,7 +31,6 @@ mqtt_client.connect(HOSTNAME, PORT, 60)
 mqtt_client.loop_start()
 
 def on_connect(client, userdata, flags, rc): #subscribe na topike
-    get_people_num()
     settings = load_settings(filePath='../settings.json')
     for device in settings:
         for topic in settings[device]["topic"]:
@@ -41,18 +40,12 @@ def on_connect(client, userdata, flags, rc): #subscribe na topike
 mqtt_client.on_connect = on_connect
 
 def on_message(client, userdata, msg):
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     data = json.loads(msg.payload.decode('utf-8'))
     proces(data)
+    print(data)
     save_to_db(data)
 
 mqtt_client.on_message = on_message
-
-def get_people_num():
-     settings = load_settings(filePath='../house_info.json')
-     global people_num
-     people_num = settings['PEOPLE_NUMBER']
-     return settings['PEOPLE_NUMBER']
 
 @socketio.on('connect')
 def handle_connect():
@@ -63,9 +56,14 @@ def emit_updated_data(data):
     socketio.emit('updated_data', {'data': data})
 
 def proces(data):
-     if data["measurement"] == "realised" and data["name"].startswith("D"):
-        print("nesto je uradio")
+     if data["measurement"] == "realised" and data["name"].startswith("DPIR"):
+        print("DPIR function")
         nesto = try_detection_DPIR(data["name"][-1])
+        print(nesto)
+        emit_updated_data({"status": "success", "data": nesto});
+     if data["measurement"] == "realised" and data["name"].startswith("RPIR"):
+        print("RPIR function")
+        nesto = try_detection_RPIR(data)
         print(nesto)
         emit_updated_data({"status": "success", "data": nesto});
 

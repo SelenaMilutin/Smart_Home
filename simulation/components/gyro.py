@@ -38,8 +38,8 @@ def callback(rotation, acceleration, publish_event, settings, verbose = False):
         print("="*20)
         # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
         # print(f"Entered pin {pin_val}")
-    print(f"Gyro roation {rotation}")
-    print(f"Gyro acceleration {acceleration}")
+        print(f"Gyro roation {rotation}")
+        print(f"Gyro acceleration {acceleration}")
     rotation_payload = generate_payload(rotation, settings)
     acceleration_payload = generate_payload(acceleration, settings, 1)
     with counter_lock:
