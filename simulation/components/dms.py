@@ -4,14 +4,14 @@ import paho.mqtt.publish as publish
 import sys
 from simulators.dms import run_dms_simulator
 import threading
-from server.messenger_sender import generate_payload
+from server.messenger_sender import generate_dms_payload
 sys.path.append("../")
 from broker_settings import HOSTNAME, PORT
 
 
 dht_batch = []
 publish_data_counter = 0
-publish_data_limit = 3
+publish_data_limit = 1
 counter_lock = threading.Lock()
 
 def publisher_task(event, dht_batch):
@@ -41,21 +41,13 @@ def callback(pin_val, settings, publish_event, verbose = False):
         print("="*20)
         # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
         print(f"Entered pin {pin_val}")
-        # print(f"Activated")
-    button_payload = generate_payload(pin_val, settings)
+    payload = generate_dms_payload(str(pin_val), settings, pin_val == settings['pin'])
     with counter_lock:
-        dht_batch.append((settings["topic"][0], button_payload, 0, True))
+        dht_batch.append((settings["topic"][0], payload, 0, True))
         publish_data_counter += 1
 
     if publish_data_counter >= publish_data_limit:
         publish_event.set()
-
-    # correct pin entered
-    if (pin_val == settings['pin']):
-        # activate alarm system
-        # deactivate alarm system
-        # deactivate alarm
-        return
 
 
 def run_dms(settings, threads, stop_event):

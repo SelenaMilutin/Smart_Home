@@ -31,7 +31,7 @@ publisher_thread = threading.Thread(target=publisher_task, args=(publish_event, 
 publisher_thread.daemon = True
 publisher_thread.start()
 
-def callback(settings, publish_event, verbose = False):
+def callback(settings, publish_event, value = 1, verbose = False):
     global publish_data_counter, publish_data_limit
     if verbose:
         # t = time.localtime()
@@ -39,7 +39,7 @@ def callback(settings, publish_event, verbose = False):
         print("="*20)
         # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
         # print(f"Door open")
-    button_payload = generate_payload(1, settings)
+    button_payload = generate_payload(value, settings)
     with counter_lock:
         dht_batch.append((settings["topic"][0], button_payload, 0, True))
         publish_data_counter += 1
@@ -58,7 +58,7 @@ def run_ds(settings, threads, stop_event):
         else:
             from sensors.ds import run_ds_loop
             print("Starting ds1 loop")
-            ds1_thread = threading.Thread(target=run_ds_loop, args=(settings, callback, stop_event, publish_event))
+            ds1_thread = threading.Thread(target=run_ds_loop, args=(settings, threads, callback, stop_event, publish_event))
             ds1_thread.start()
             threads.append(ds1_thread)
             print("Ds1 loop started")

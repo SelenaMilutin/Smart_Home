@@ -3,9 +3,9 @@
 
 from time import sleep, strftime
 from datetime import datetime
-from components.lcd.Adafruit_LCD1602 import Adafruit_CharLCD
+from .Adafruit_LCD1602 import Adafruit_CharLCD
 
-from components.lcd.PCF8574 import PCF8574_GPIO
+from .PCF8574 import PCF8574_GPIO
 import json
 import sys
 import paho.mqtt.client as mqtt
@@ -61,6 +61,7 @@ def poject_loop(settings, callback, stop_event):
         if data["measurement"] == "humidity":
             temp = data["value"]
         callback(humidity, temp, settings, True)
+        #lcd.clear() //OVO MOZDA BUDE POTREBNO
         lcd.setCursor(0,0)  # set cursor position
         lcd.message( 'Humidity: ' + humidity +'\n' )# display CPU temperature
         lcd.message( 'Temperature: ' + temp )   # display the time

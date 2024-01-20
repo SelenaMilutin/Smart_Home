@@ -6,10 +6,10 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqtt
 import json
 from flask_cors import CORS
-from queries import *
 sys.path.append("../")
 from settings import load_settings, save_settings
 from broker_settings import HOSTNAME, PORT, INFLUX_TOKEN, BUCKET, ORG, people_num, INFLUXHOSTNAME
+from queries import *
 
 
 
@@ -31,7 +31,6 @@ mqtt_client.connect(HOSTNAME, PORT, 60)
 mqtt_client.loop_start()
 
 def on_connect(client, userdata, flags, rc): #subscribe na topike
-    get_people_num()
     settings = load_settings(filePath='../settings.json')
     for device in settings:
         for topic in settings[device]["topic"]:
@@ -41,18 +40,16 @@ def on_connect(client, userdata, flags, rc): #subscribe na topike
 mqtt_client.on_connect = on_connect
 
 def on_message(client, userdata, msg):
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     data = json.loads(msg.payload.decode('utf-8'))
+    if (type(data)==str):
+        data = json.loads(data)
     proces(data)
+    if data['measurement'] == "alarm-state":
+        save_alarm(data)
+        return
     save_to_db(data)
 
 mqtt_client.on_message = on_message
-
-def get_people_num():
-     settings = load_settings(filePath='../house_info.json')
-     global people_num
-     people_num = settings['PEOPLE_NUMBER']
-     return settings['PEOPLE_NUMBER']
 
 @socketio.on('connect')
 def handle_connect():
@@ -63,21 +60,40 @@ def emit_updated_data(data):
     socketio.emit('updated_data', {'data': data})
 
 def proces(data):
-     if data["measurement"] == "realised" and data["name"].startswith("D"):
-        print("nesto je uradio")
+    if (type(data)==str):
+        data = json.loads(data)
+    if data["measurement"] == "realised" and data["name"].startswith("DPIR"):
+        print("DPIR function")
         nesto = try_detection_DPIR(data["name"][-1])
         print(nesto)
-        emit_updated_data({"status": "success", "data": nesto});
+        emit_updated_data({"status": "success", "data": nesto})
+    if data["measurement"] == "realised" and data["name"].startswith("RPIR"):
+        print("RPIR function")
+        nesto = try_detection_RPIR(data)
+        print(nesto)
+        emit_updated_data({"status": "success", "data": nesto})
+    if data["measurement"] == "entered-pin" and data["name"].startswith("DMS"):
+        print("DMS processing on server")
+        ret = process_entered_pin(data)
+        # print(ret)
+        emit_updated_data({"status": "success", "data": ret})
 
 
 def save_to_db(data):
-    # print(data)
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
     point = (
         Point(data["measurement"])
         .tag("simulated", data["simulated"])
         .tag("runs_on", data["runs_on"])
         .tag("name", data["name"])
+        .field("value", data["value"])
+    )
+    write_api.write(bucket=BUCKET, org=ORG, record=point)
+
+def save_alarm(data):
+    write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+    point = (
+        Point(data["measurement"])
         .field("value", data["value"])
     )
     write_api.write(bucket=BUCKET, org=ORG, record=point)
@@ -153,7 +169,7 @@ def get_alarm_system_active(pi_name):
 
 @app.route('/alarm-state/<pi_name>', methods=['GET'])
 def get_alarm_state_active(pi_name):
-    return jsonify(get_alarm_state("-1d", "alarm-activation", pi_name))
+    return jsonify(get_alarm_state())
 
 
 if __name__ == '__main__':

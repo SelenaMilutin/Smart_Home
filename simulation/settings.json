@@ -119,7 +119,7 @@
         "topic": ["realised-DPIR2"]
     },
     "GDHT": {
-        "simulated": false,
+        "simulated": true,
         "pin": 27,
         "runs_on": "PI2",
         "name": "GDHT",
@@ -127,7 +127,7 @@
         "topic": ["temperature-GDHT", "humidity-GDHT"]
     },
     "GLCD": {
-        "simulated": false,
+        "simulated": true,
         "pin": 27,
         "runs_on": "PI2",
         "name": "GLCD",
