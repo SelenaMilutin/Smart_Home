@@ -54,6 +54,7 @@
         "C3": 20,
         "C4": 21,
         "pin": 1234,
+        "should_be_correct": false,
         "runs_on": "PI1",
         "name": "DMS",
         "measurement": ["entered-pin"],

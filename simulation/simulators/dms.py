@@ -9,7 +9,7 @@ def generate_values(settings):
             rnd = random.randint(0, 9)
             pin += str(rnd)
             time.sleep(1)
-        if (random.randint(1, 10) == 2):  # 10% chance that correct pin is entered
+        if (random.randint(1, 5) == 2):  # 10% chance that correct pin is entered
             pin = settings['pin']
         yield pin
 

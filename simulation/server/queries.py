@@ -1,12 +1,16 @@
 # from flask import Flask, jsonify, request
+import threading
+import time
+import paho.mqtt.publish as publish
+
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import sys
 
-
 sys.path.append("../")
-from broker_settings import HOSTNAME, INFLUX_TOKEN, BUCKET, ORG, INFLUXHOSTNAME
+from broker_settings import HOSTNAME, INFLUX_TOKEN, BUCKET, ORG, INFLUXHOSTNAME, PORT
 from alarm.alarm import activate_alarm
+from mqtt_topics import DMS_PIN_REQUEST_TOPIC
 
 url = f"http://{INFLUXHOSTNAME}:8086"
 # # url = "http://10.1.121.45:8086"
@@ -61,16 +65,38 @@ def get_data_DPIR(time, measurement, device_name):
     return people_num
 
 def process_entered_pin(data):
-    # alarm_system_active = server.get_alarm_system_active()
-        # activate alarm system
-        # deactivate alarm system
+    
 
     alarm_state = get_alarm_state()
+    alarm_system_active = get_alarm_system_state()
     print("alarm state:", alarm_state)
-    if alarm_state and data['correct_pin']:
-        print("deactivation")
-        activate_alarm("deactivate", data['simulated'], data['name'], data['runs_on'], True)
+    print("alarm system state:", alarm_system_active)
+    print("pin correct: ", data['is_correct'])
 
+    if data['is_correct']:
+        if alarm_state: # deactivation
+            print("alarm deactivation")
+            activate_alarm("deactivate", data['simulated'], data['name'], data['runs_on'], True)
+            if alarm_system_active:
+                print("alarm system deactivation")
+                save_alarm_system_state(0)
+        else:
+            print("alarm system activation")
+            thread = threading.Thread(target=save_alarm_system_state, args=(1, 10))
+            thread.start()
+    else:
+        if alarm_system_active == 1 and data['should_be_correct'] and not data['is_correct']:
+            print("alarm activation because alarm system active and incorrect pin and should be correct")
+            activate_alarm("activate", data['simulated'], data['name'], data['runs_on'], True)
+    return {"status": "success", "data": "ok"}
+
+
+def process_ds(data):
+
+    alarm_system_active = get_alarm_system_state()
+    if alarm_system_active == 1:
+        publish.single(DMS_PIN_REQUEST_TOPIC, 1, hostname=HOSTNAME, port=PORT)
+        print("pin request sent to DMS")
     return {"status": "success", "data": "ok"}
 
 def get_data_by_time_measurment_device_name(time, measurement, device_name):
@@ -109,14 +135,14 @@ def get_sef_movement():
     print(sum)
     return sum > 100
     
-# def get_alarm_system_state(time, measurement, device_name):
-#     query = f"""from(bucket: "{BUCKET}")
-#         |> range(start: -{time})
-#         |> filter(fn: (r) => r._measurement == "{measurement}" and r["name"] == "{device_name}")
-#         |> last()"""
-#     returned = handle_influx_query(query)
-#     data = returned.get("data")
-#     return {"status": "success", "data": data}
+def get_alarm_system_state():
+    query = f"""from(bucket: "{BUCKET}")
+        |> range(start: -30d)
+        |> filter(fn: (r) => r._measurement == "alarm-system")
+        |> last()"""
+    returned = handle_influx_query(query)
+    data = returned.get("data")
+    return 0 if not data else data[0].get("_value")
 
 def get_alarm_state():
     query = f"""from(bucket: "{BUCKET}")
@@ -136,6 +162,17 @@ def save_people_num(number):
     )
     write_api.write(bucket=BUCKET, org=ORG, record=point)
 
+def save_alarm_system_state(state, sleep=0):
+    # state = 1 active
+    # state = 0 deactivated
+    time.sleep(sleep)
+    write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+    point = (
+        Point("alarm-system")
+        .field("value", state)
+    )
+    write_api.write(bucket=BUCKET, org=ORG, record=point)
+    print("saved alarm system state: ", state)
 
 if __name__=="__main__":
     print(get_sef_movement())

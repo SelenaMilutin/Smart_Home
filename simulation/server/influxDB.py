@@ -6,11 +6,11 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqtt
 import json
 from flask_cors import CORS
+from queries import *
 sys.path.append("../")
 from settings import load_settings, save_settings
-from broker_settings import HOSTNAME, PORT, INFLUX_TOKEN, BUCKET, ORG, people_num, INFLUXHOSTNAME
-from queries import *
-
+from mqtt_topics import DMS_PIN_REQUEST_TOPIC
+from broker_settings import HOSTNAME, PORT, BUCKET, ORG, people_num, INFLUXHOSTNAME
 
 
 app = Flask(__name__)
@@ -73,10 +73,9 @@ def proces(data):
         print(nesto)
         emit_updated_data({"status": "success", "data": nesto})
     if data["measurement"] == "entered-pin" and data["name"].startswith("DMS"):
-        print("DMS processing on server")
-        ret = process_entered_pin(data)
-        # print(ret)
-        emit_updated_data({"status": "success", "data": ret})
+        process_entered_pin(data)
+    if data["measurement"] == "motion" and data["name"].startswith("DS"):
+        process_ds(data)
 
 
 def save_to_db(data):
@@ -170,7 +169,6 @@ def get_alarm_system_active(pi_name):
 @app.route('/alarm-state/<pi_name>', methods=['GET'])
 def get_alarm_state_active(pi_name):
     return jsonify(get_alarm_state())
-
 
 if __name__ == '__main__':
     # app.run(debug=True)

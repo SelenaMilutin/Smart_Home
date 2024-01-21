@@ -2,13 +2,14 @@
 
 import sys
 import time
-from server.messenger_sender import generate_payload
-from simulation.mqtt_topics import DOOR_LIGHT_TOPIC
-from simulators.light import run_light_simulator
 import threading
 import paho.mqtt.publish as publish
-sys.path.append("../")
 import paho.mqtt.client as mqtt
+
+sys.path.append("../")
+from simulators.light import run_light_simulator
+from server.messenger_sender import generate_payload
+from mqtt_topics import DOOR_LIGHT_TOPIC
 from broker_settings import HOSTNAME, PORT
 
 dht_batch = []

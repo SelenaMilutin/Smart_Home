@@ -51,13 +51,14 @@ def generate_alarm_payload(value):
     ret_payload = json.dumps(payload)
     return ret_payload
 
-def generate_dms_payload(value, settings, correct_pin, topic_num=0):
+def generate_dms_payload(value, settings, is_correct_pin, topic_num=0):
     payload = {
         "measurement": settings["measurement"][topic_num],
         "value": value,
         "simulated": settings["simulated"],
         "name": settings["name"],
-        "correct_pin": correct_pin,
+        "is_correct": is_correct_pin,
+        "should_be_correct": settings["should_be_correct"],
         "runs_on": settings["runs_on"]
     }
     temperature_payload = json.dumps(payload)

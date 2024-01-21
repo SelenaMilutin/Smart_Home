@@ -49,6 +49,7 @@ def run_dms_loop(settings, callback, stop_event, publish_event):
 
 
     pin = ""
+    timer = 0
     while True:
         pin += readLine(R1, ["1","2","3","A"], c_tuple)
         pin += readLine(R2, ["4","5","6","B"], c_tuple)
@@ -56,10 +57,12 @@ def run_dms_loop(settings, callback, stop_event, publish_event):
         last = readLine(R4, ["*","0","#","D"], c_tuple)
         if last == "0":
             pin += last
-        if last == "#": # Terminating key, pin is entered
+        if last == "#" or timer > 10: # Terminating key, pin is entered OR time is up
             callback(pin, settings, publish_event, True)
             pin = ""
+            settings['should_be_correct'] = False
+            timer = 0
         time.sleep(0.2)
-
+        timer += 0.2
         if stop_event.is_set():
             return
