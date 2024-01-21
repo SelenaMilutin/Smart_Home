@@ -1,5 +1,3 @@
-import paho.mqtt.client as mqtt
-import paho.mqtt.publish as publish
 import json
 from threading import Lock
 from copy import deepcopy

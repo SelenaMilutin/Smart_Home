@@ -1,4 +1,5 @@
 # from flask import Flask, jsonify, request
+import json
 import threading
 import time
 import paho.mqtt.publish as publish
@@ -10,7 +11,7 @@ import sys
 sys.path.append("../")
 from broker_settings import HOSTNAME, INFLUX_TOKEN, BUCKET, ORG, INFLUXHOSTNAME, PORT
 from alarm.alarm import activate_alarm
-from mqtt_topics import DMS_PIN_REQUEST_TOPIC
+from mqtt_topics import DMS_PIN_REQUEST_TOPIC, B4SD_CLOCK_TOPIC, BUZZER_CLOCK_TOPIC
 
 url = f"http://{INFLUXHOSTNAME}:8086"
 # # url = "http://10.1.121.45:8086"
@@ -153,6 +154,15 @@ def get_alarm_state():
     data = returned.get("data")
     return 0 if not data else data[0].get("_value")
 
+def get_last_set_clock():
+    query = f"""from(bucket: "{BUCKET}")
+        |> range(start: -30d)
+        |> filter(fn: (r) => r._measurement == "clock")
+        |> last()"""
+    returned = handle_influx_query(query)
+    data = returned.get("data")
+    return {"hour": -1, "minute": -1} if not data else {"hour": data[0].get("hour"), "minute":data[0].get("minute")}
+
 def save_people_num(number):
     print('usao u save number')
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
@@ -173,6 +183,40 @@ def save_alarm_system_state(state, sleep=0):
     )
     write_api.write(bucket=BUCKET, org=ORG, record=point)
     print("saved alarm system state: ", state)
+
+
+def save_clock(hour, minute):
+    try:
+        print("saving clock {hour}:{minute}")
+
+        # to database
+        write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+        point = (
+            Point("clock")
+            .field("hour", hour)
+            .field("minute", minute)
+        )
+        write_api.write(bucket=BUCKET, org=ORG, record=point)
+
+        # publish to devices
+        publish.single(BUZZER_CLOCK_TOPIC, json.dumps({"hour": hour, "minute": minute, "for": "set"}), hostname=HOSTNAME, port=PORT)
+        publish.single(B4SD_CLOCK_TOPIC, json.dumps({"hour": hour, "minute": minute, "for": "set"}), hostname=HOSTNAME, port=PORT)
+
+        return {"status": "success", "data": "Clock set successfully."}
+    except:
+        return {"status": "fail", "data": "Error."}
+
+def save_clock_off(cancel=False):
+    try:
+        print("saving clock off")
+        for_reason = "cancel" if cancel else "off"
+        # publish to devices
+        publish.single(BUZZER_CLOCK_TOPIC, json.dumps({"hour": -1, "minute": -1, "for": for_reason}), hostname=HOSTNAME, port=PORT)
+        publish.single(B4SD_CLOCK_TOPIC, json.dumps({"hour": -1, "minute": -1, "for": for_reason}), hostname=HOSTNAME, port=PORT)
+
+        return {"status": "success", "data": "Clock off successfully."}
+    except:
+        return {"status": "fail", "data": "Error."}
 
 if __name__=="__main__":
     print(get_sef_movement())

@@ -170,6 +170,18 @@ def get_alarm_system_active(pi_name):
 def get_alarm_state_active(pi_name):
     return jsonify(get_alarm_state())
 
+@app.route('/clock', methods=['POST'])
+def set_clock():
+    hour = int(request.json.get('hour'))
+    minute = int(request.json.get('minute'))
+    if (hour > 23 or hour < 0) or (minute > 59 or minute < 0):
+        return {"status": "fail", "data": "Wrong fields."}
+    return jsonify(save_clock(hour, minute))
+
+@app.route('/clock-off', methods=['PUT'])
+def set_clock_off():
+    return jsonify(save_clock_off())
+
 if __name__ == '__main__':
     # app.run(debug=True)
     socketio.run(app, debug=True)

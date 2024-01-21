@@ -36,18 +36,31 @@ def run_display_loop(settings, callback, stop_event):
     
     try:
         while True:
-            n = time.ctime()[11:13]+time.ctime()[14:16]
-            s = str(n).rjust(4)
-            for digit in range(4):
-                for loop in range(0,7):
-                    GPIO.output(segments[loop], num[s[digit]][loop])
-                    if (int(time.ctime()[18:19])%2 == 0) and (digit == 1):
-                        GPIO.output(25, 1)
-                    else:
-                        GPIO.output(25, 0)
-                GPIO.output(digits[digit], 0)
-                time.sleep(0.001)
-                GPIO.output(digits[digit], 1)
+
+            start_time = time.time() 
+            elapsed_time = 0.0
+
+            if settings['clock']['hour'] != -1: # clock is set
+                if int(time.ctime()[11:13]) == settings['clock']['hour'] and int(time.ctime()[14:16]) == settings['clock']['minute']: # clock sounds off at set time
+                    settings['blink'] = True   
+
+            while elapsed_time < 0.5:  # display for 0.5 seconds
+                n = time.ctime()[11:13]+time.ctime()[14:16]
+                s = str(n).rjust(4)
+                for digit in range(4):
+                    for loop in range(0,7):
+                        GPIO.output(segments[loop], num[s[digit]][loop])
+                        if (int(time.ctime()[18:19])%2 == 0) and (digit == 1):
+                            GPIO.output(25, 1)
+                        else:
+                            GPIO.output(25, 0)
+                    GPIO.output(digits[digit], 0)
+                    time.sleep(0.001)
+                    GPIO.output(digits[digit], 1)
+                elapsed_time = time.time() - start_time
+
+            if settings['blink']: # hide display for 0.5 seconds to achieve blinking
+                time.sleep(0.5)
     finally:
         GPIO.cleanup()
     

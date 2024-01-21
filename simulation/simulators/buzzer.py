@@ -1,6 +1,6 @@
 
+import datetime
 import time
-from pynput import keyboard
 import threading
 
 
@@ -8,6 +8,12 @@ def loop_function(settings, stop_event, publish_event, callback):
     while True:
         if settings['on']: callback(1, settings, publish_event)
         if not settings['on']: callback(0, settings, publish_event)
+
+        if settings['name'] == 'BB':
+            if settings['clock']['hour'] != -1: # clock is set
+                t = datetime.now()
+                if t.hour == settings['clock']['hour'] and t.minute == settings['clock']['minute']: # clock sounds off at set time
+                    settings['on'] = True   
         if stop_event.is_set():
             return
         time.sleep(1)    
