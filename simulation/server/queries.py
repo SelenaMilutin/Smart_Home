@@ -3,9 +3,9 @@ from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import sys
 
-from simulation.alarm.alarm import activate_alarm
 
 sys.path.append("../")
+from alarm.alarm import activate_alarm
 from broker_settings import HOSTNAME, INFLUX_TOKEN, BUCKET, ORG, INFLUXHOSTNAME
 
 url = f"http://{INFLUXHOSTNAME}:8086"

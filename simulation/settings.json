@@ -115,7 +115,9 @@
         "runs_on": "PI2",
         "name": "DPIR2",
         "measurement": ["realised"],
-        "topic": ["realised-DPIR2"]
+        "topic": ["realised-DPIR2"],
+        "isDoor": true
+
     },
     "GDHT": {
         "simulated": true,

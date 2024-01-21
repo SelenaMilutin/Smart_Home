@@ -14,18 +14,25 @@ def generate_values():
 def run_ds_simulator(settings, callback, stop_event, publish_event):
     previous = 0
     counter = 0
+    alarm_activated = False
     while True:
         pressed = random.randint(0, 1)
-        # print(pressed)
+        # pressed button
         if (pressed==1 and previous==0):
             callback(settings, publish_event)
+        # holding button pressed
         elif (pressed == 1 and previous ==1):
              counter += 1
              print(counter)
+        # reliesed button
         elif (pressed==0 and previous==1):
             counter = 0
+            if alarm_activated:
+                alarm_activated = False
+                activate_alarm("deactivate", settings["simulated"], settings["name"], settings["runs_on"])
 
         if counter >= 4:
+            alarm_activated = True
             activate_alarm("activate", settings["simulated"], settings["name"], settings["runs_on"])
              
         previous = pressed

@@ -1,9 +1,11 @@
 import json
+import sys
 import threading
 from broker_settings import HOSTNAME, PORT
 import paho.mqtt.publish as publish
 
-from simulation.mqtt_topics import ALARM_ACTIVATION_TOPIC, BUZZER_ALARM_TOPIC
+sys.path.append("../")
+from mqtt_topics import ALARM_ACTIVATION_TOPIC, BUZZER_ALARM_TOPIC
 
 dht_batch = []
 publish_data_counter = 0
