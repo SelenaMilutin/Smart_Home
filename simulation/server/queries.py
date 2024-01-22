@@ -37,14 +37,14 @@ def try_detection_RPIR(data):
      if people_num == 0:
         activate_alarm("activate", data["simulated"], data["name"], data["runs_on"])
 
-        return {"status": "error", "data": "alarm"}
-     return {"status": "success", "data": "okej"}
+        return True
+     return False
 
 def try_detection_DPIR(dus_id):
-     nesto = get_data_DPIR('5s', 'distance', "DUS" + dus_id)
-     save_people_num(nesto)
+     people_num = get_data_DPIR('5s', 'distance', "DUS" + dus_id)
+     save_people_num(people_num)
 
-     return {"status": "success", "data": nesto}
+     return people_num
 
 def get_data_DPIR(time, measurement, device_name):
         data = get_data_by_time_measurment_device_name(time, measurement, device_name)
@@ -85,15 +85,17 @@ def get_sum_of_values_by_time_measurment_device_name(time, measurement, device_n
         |> filter(fn: (r) => r._measurement == "{measurement}" and r["name"] == "{device_name}")
         |> sum(column: "_value")"""
     returned = handle_influx_query(query)
-    print(returned)
+    # print(returned)
     data = returned.get("data")
     sum_of_values = 0 if not data else data[0].get("_value", 0)
     return sum_of_values
 
 
-def get_sef_movement():
+def is_sef_movement_important(data):
     sum = get_sum_of_values_by_time_measurment_device_name("5s", "rotation", "GSG")
-    print(sum)
+    # print(sum)
+    if sum > 100:
+        activate_alarm("activate", data["simulated"], data["name"], data["runs_on"])
     return sum > 100
     
 
@@ -108,4 +110,4 @@ def save_people_num(number):
 
 
 if __name__=="__main__":
-    print(get_sef_movement())
+    print(is_sef_movement_important())

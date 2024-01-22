@@ -39,7 +39,7 @@ def callback(settings, publish_event, value = 1, verbose = False):
         print("="*20)
         # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
         # print(f"Door open")
-    button_payload = generate_payload(value, settings)
+    button_payload = generate_payload(1, settings)
     with counter_lock:
         dht_batch.append((settings["topic"][0], button_payload, 0, True))
         publish_data_counter += 1

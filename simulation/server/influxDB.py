@@ -1,4 +1,8 @@
+import signal
 import sys
+from threading import Thread
+import time
+import schedule
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO, emit
 from influxdb_client import Point
@@ -6,10 +10,13 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqtt
 import json
 from flask_cors import CORS
-from queries import try_detection_DPIR, influxdb_client, try_detection_RPIR
+from queries import try_detection_DPIR, influxdb_client, try_detection_RPIR, is_sef_movement_important
 sys.path.append("../")
 from settings import load_settings, save_settings
 from broker_settings import HOSTNAME, PORT, INFLUX_TOKEN, BUCKET, ORG, people_num, INFLUXHOSTNAME
+import atexit
+
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 
@@ -27,6 +34,12 @@ mqtt_client = mqtt.Client()
 mqtt_client.connect(HOSTNAME, PORT, 60)
 
 # mqtt_client.connect("10.1.121.102", 1883, 60)
+def get_data_gyro():
+    settings = load_settings(filePath='../settings.json')
+    for device in settings:
+        if settings[device]["name"] == "GSG":
+            return settings[device]
+
 
 mqtt_client.loop_start()
 
@@ -62,17 +75,19 @@ def handle_message(message):
 def emit_updated_data(data):
     socketio.emit('updated_data', {'data': data})
 
+def emit_alarm(data):
+    socketio.emit('alarm', {'data': data})
+
 def proces(data):
      if data["measurement"] == "realised" and data["name"].startswith("DPIR"):
         print("DPIR function")
-        nesto = try_detection_DPIR(data["name"][-1])
-        print(nesto)
-        emit_updated_data({"status": "success", "data": nesto});
+        people_num = try_detection_DPIR(data["name"][-1])
+        emit_updated_data({"from": data["name"], "people_num": people_num});
      if data["measurement"] == "realised" and data["name"].startswith("RPIR"):
         print("RPIR function")
-        nesto = try_detection_RPIR(data)
-        print(nesto)
-        emit_updated_data({"status": "success", "data": nesto});
+        isAlarmActivated = try_detection_RPIR(data)
+        if isAlarmActivated: #TODO move logic elsewhere
+            emit_alarm({"from": data["name"], "data": "Room Pir detected movement but no one is in the house"});
 
 
 def save_to_db(data):
@@ -92,6 +107,23 @@ def store_data():
     return jsonify(try_detection_DPIR())
 
 
+
+def check_sef():
+    # print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+    data = get_data_gyro()
+    is_important = is_sef_movement_important(data)
+    if is_important:
+        emit_alarm({"from": data["name"], "data": "Sef moved"});
+
+        
+
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=check_sef, trigger="interval", seconds=5)
+scheduler.start()
+
+# Shut down the scheduler when exiting the app
+atexit.register(lambda: scheduler.shutdown())
 # # Route to store dummy data
 # @app.route('/store_data', methods=['POST'])
 # def store_data():

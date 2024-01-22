@@ -47,3 +47,44 @@ input[type="number"] {
     -moz-appearance: textfield; /* Firefox */
   }
   
+
+table {
+  background-color: rgb(28, 30, 34);
+  width: 80%;
+  margin-bottom: 2vh;
+}
+
+.lcd {
+  margin-top: 4vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.centered {
+  text-align: center;
+  position: relative;
+}
+
+.overlay-text {
+  position: absolute;
+  top: 45%; /* Adjust as needed */
+  left: 50%; /* Adjust as needed */
+  transform: translate(-50%, -50%); /* Center the text */
+  color: white; /* Adjust the color */
+  font-size: 18px; /* Adjust the font size */
+  font-weight: bold; /* Adjust the font weight */
+  z-index: 1; /* Ensure text appears on top of the image */
+}
+
+.overlay-text2 {
+  position: absolute;
+  top: 60%; /* Adjust as needed */
+  left: 50%; /* Adjust as needed */
+  transform: translate(-50%, -50%); /* Center the text */
+  color: white; /* Adjust the color */
+  font-size: 18px; /* Adjust the font size */
+  font-weight: bold; /* Adjust the font weight */
+  z-index: 1; /* Ensure text appears on top of the image */
+}
