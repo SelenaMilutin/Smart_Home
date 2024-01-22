@@ -43,11 +43,18 @@ def button_pressed(event):
     print("BUTTON PRESS DETECTED")
 
 def run_ds_rising(settings, threads, callback, publish_event, stop_event):
-    for i in range(5):
+    counter = 0
+    alarm_activated = False
+    while True:
         is_pressed = GPIO.input(settings["pin"])
         print(is_pressed)
         if not is_pressed:
+            if alarm_activated:
+                activate_alarm("deactivate", settings["simulated"], settings["name"], settings["runs_on"])
             stop_event.set()
+        if counter >= 5:
+            alarm_activated = True
+            activate_alarm("activate", settings["simulated"], settings["name"], settings["runs_on"])
+
+        counter += 1
         time.sleep(1)
-    activate_alarm("activate", settings["simulated"], settings["name"], settings["runs_on"])
-    stop_event.set()

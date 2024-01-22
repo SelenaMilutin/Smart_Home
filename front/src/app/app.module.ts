@@ -10,6 +10,9 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { DatePipe } from '@angular/common';
 import { LandingComponent } from './modules/landing/landing.component';
 import { OnePiComponent } from './modules/one-pi/one-pi.component';
+import { SocketIoModule, SocketIoConfig  } from 'ngx-socket-io';
+
+const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
 @NgModule({
   declarations: [
@@ -22,7 +25,8 @@ import { OnePiComponent } from './modules/one-pi/one-pi.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    HttpClientModule
+    HttpClientModule,
+    SocketIoModule.forRoot(config),
   ],
   providers: [
     {

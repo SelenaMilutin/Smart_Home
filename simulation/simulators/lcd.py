@@ -24,9 +24,11 @@ def run_display_simulator(settings, callback, stop_event):
 
     def on_message(client, userdata, msg):
         global humidity, temp
-
+        
         # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         data = json.loads(msg.payload.decode('utf-8'))
+        if data["name"] != "GDHT":
+             return
         if data["measurement"] == "temperature":
             humidity = data["value"]
         if data["measurement"] == "humidity":

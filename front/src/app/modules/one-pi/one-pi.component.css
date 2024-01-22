@@ -41,3 +41,9 @@ iframe {
     height: 600px;
     border: none;
 }
+
+input[type="number"] {
+    appearance: none;
+    -moz-appearance: textfield; /* Firefox */
+  }
+  

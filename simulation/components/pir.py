@@ -36,7 +36,7 @@ publisher_thread.start()
 
 
 
-def callback_room_pir(settings, publish_event, verbose = False):
+def callback_room_pir(settings, publish_event, isDPIR1, verbose = False):
         
     global publish_data_counter, publish_data_limit
     if verbose:

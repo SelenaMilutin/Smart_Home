@@ -31,7 +31,7 @@ publisher_thread = threading.Thread(target=publisher_task, args=(publish_event, 
 publisher_thread.daemon = True
 publisher_thread.start()
 
-def callback(settings, publish_event, value = 1, verbose = False):
+def callback(settings, publish_event, value = True, verbose = False):
     global publish_data_counter, publish_data_limit
     if verbose:
         # t = time.localtime()

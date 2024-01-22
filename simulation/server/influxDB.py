@@ -14,8 +14,8 @@ from broker_settings import HOSTNAME, PORT, BUCKET, ORG, people_num, INFLUXHOSTN
 
 
 app = Flask(__name__)
-CORS(app)
-socketio = SocketIO(app)
+CORS(app, supports_credentials=True)
+socketio = SocketIO(app, cors_allowed_origins="http://localhost:4200")
 
 url = f"http://{HOSTNAME}:8086"
 # url = "http://10.1.121.45:8086"
@@ -55,6 +55,13 @@ mqtt_client.on_message = on_message
 def handle_connect():
     print('Client connected')
     emit('response', {'data': 'Connected'})
+
+@socketio.on('message_from_client')
+def handle_message(message):
+    print('Received message:', message)
+
+    # Broadcast the received message to all connected clients
+    emit('message_from_server', {'data': "Hello from server"}, broadcast=True)
 
 def emit_updated_data(data):
     socketio.emit('updated_data', {'data': data})
