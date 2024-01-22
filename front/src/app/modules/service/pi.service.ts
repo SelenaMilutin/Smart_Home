@@ -27,4 +27,8 @@ export class PiService {
     return this.http.get<PiComponent[]>(environment.apiHost + `/component/${piName}`)
   }
 
+  putAlarmOff(): Observable<any> {
+    return this.http.put<PiComponent[]>(environment.apiHost + '/alarm-off', {})
+  }
+
 }

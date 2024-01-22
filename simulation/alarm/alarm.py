@@ -32,7 +32,7 @@ publisher_thread = threading.Thread(target=publisher_task, args=(publish_event, 
 publisher_thread.daemon = True
 publisher_thread.start()
 
-def publish_alarm(activate, simulated, component_name, runs_on):
+def publish_alarm(activate):
     global publish_data_counter, publish_data_limit
     payload = generate_alarm_payload(1 if activate=="activate" else 0)
     with counter_lock:
@@ -46,7 +46,7 @@ def publish_to_buzzer(activate):
     publish.single(BUZZER_ALARM_TOPIC, activate, hostname=HOSTNAME, port=PORT)
 
 
-def activate_alarm(activate, simulated, component_name, runs_on, verbose = False):
+def activate_alarm(activate, verbose = False):
     # activate: "activate" OR "deactivate"
     if verbose:
         print(f"Alarm")
@@ -54,6 +54,6 @@ def activate_alarm(activate, simulated, component_name, runs_on, verbose = False
         print(activate)
     # if component_name == "DS1" or "DS2" and ! alarm system active: 
         # return 
-    publish_alarm(activate, simulated, component_name, runs_on)
+    publish_alarm(activate)
     publish_to_buzzer(activate)
 

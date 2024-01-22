@@ -50,11 +50,11 @@ def run_ds_rising(settings, threads, callback, publish_event, stop_event):
         print(is_pressed)
         if not is_pressed:
             if alarm_activated:
-                activate_alarm("deactivate", settings["simulated"], settings["name"], settings["runs_on"])
+                activate_alarm("deactivate")
             stop_event.set()
         if counter >= 5:
             alarm_activated = True
-            activate_alarm("activate", settings["simulated"], settings["name"], settings["runs_on"])
+            activate_alarm("activate")
 
         counter += 1
         time.sleep(1)

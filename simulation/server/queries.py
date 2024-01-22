@@ -41,7 +41,7 @@ def handle_influx_query(query):
 def try_detection_RPIR(data):
     people_num = get_last_data("people_num")
     if people_num == 0:
-        activate_alarm("activate", data["simulated"], data["name"], data["runs_on"])
+        activate_alarm("activate")
 
         return {"status": "error", "data": "alarm"}
     return {"status": "success", "data": "okej"}
@@ -78,7 +78,7 @@ def process_entered_pin(data):
     if data['is_correct']:
         if alarm_state: # deactivation
             print("alarm deactivation")
-            activate_alarm("deactivate", data['simulated'], data['name'], data['runs_on'], True)
+            activate_alarm("deactivate", verbose=True)
             if alarm_system_active:
                 print("alarm system deactivation")
                 save_alarm_system_state(0)
@@ -89,7 +89,7 @@ def process_entered_pin(data):
     else:
         if alarm_system_active == 1 and data['should_be_correct'] and not data['is_correct']:
             print("alarm activation because alarm system active and incorrect pin and should be correct")
-            activate_alarm("activate", data['simulated'], data['name'], data['runs_on'], True)
+            activate_alarm("activate", verbose=True)
     return {"status": "success", "data": "ok"}
 
 

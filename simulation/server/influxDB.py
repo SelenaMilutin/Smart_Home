@@ -92,8 +92,6 @@ def proces(data):
 
 
 def save_to_db(data):
-    print(data)
-    print(type(data['value']))
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
     point = (
         Point(data["measurement"])
@@ -198,6 +196,12 @@ def set_clock():
 @app.route('/clock-off', methods=['PUT'])
 def set_clock_off():
     return jsonify(save_clock_off())
+
+@app.route('/alarm-off', methods=['PUT'])
+def set_alarm_off():
+    print("clicked alarm off")
+    activate_alarm("deactivate", verbose=True)
+    return {"status": "success", "data": "Alarm turned off."}
 
 if __name__ == '__main__':
     # app.run(debug=True)

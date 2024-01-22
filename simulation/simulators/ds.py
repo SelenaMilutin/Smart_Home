@@ -2,13 +2,6 @@ import time
 import random
 
 from simulation.alarm.alarm import activate_alarm
-
-
-def generate_values():
-      while True:
-            rnd = random.randint(0, 1)
-            
-            yield rnd
       
 
 def run_ds_simulator(settings, callback, stop_event, publish_event):
@@ -32,11 +25,11 @@ def run_ds_simulator(settings, callback, stop_event, publish_event):
             counter = 0
             if alarm_activated:
                 alarm_activated = False
-                activate_alarm("deactivate", settings["simulated"], settings["name"], settings["runs_on"])
+                activate_alarm("deactivate")
 
         if counter >= 4:
             alarm_activated = True
-            activate_alarm("activate", settings["simulated"], settings["name"], settings["runs_on"], True)
+            activate_alarm("activate")
         previous = pressed
         time.sleep(1)
         if stop_event.is_set():

@@ -19,7 +19,7 @@ def run_dms_simulator(settings, callback, stop_event, publish_event):
         callback(val, settings, publish_event, True)
         if stop_event.is_set():
             break
-        time.sleep(5)
+        time.sleep(10)
 
    
               
