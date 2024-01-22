@@ -40,10 +40,13 @@ def on_connect(client, userdata, flags, rc): #subscribe na topike
 mqtt_client.on_connect = on_connect
 
 def on_message(client, userdata, msg):
-    data = json.loads(msg.payload.decode('utf-8'))
-    if (type(data)==str):
-        data = json.loads(data)
+    payload = msg.payload.decode('utf-8')
+    # print("u on message payload", type(payload), payload)
+    data = json.loads(payload)
+    # print("u on message", type(data), data)
     proces(data)
+    # if (type(data)==str):
+    #     data = json.loads(data)
     if data['measurement'] == "alarm-state":
         save_alarm(data)
         return
@@ -67,6 +70,7 @@ def emit_updated_data(data):
     socketio.emit('updated_data', {'data': data})
 
 def proces(data):
+    # print("u proces", type(data), data)
     if (type(data)==str):
         data = json.loads(data)
     if data["measurement"] == "realised" and data["name"].startswith("DPIR"):
@@ -82,10 +86,14 @@ def proces(data):
     if data["measurement"] == "entered-pin" and data["name"].startswith("DMS"):
         process_entered_pin(data)
     if data["measurement"] == "motion" and data["name"].startswith("DS"):
+        if BUCKET == "iot":
+            data["value"] = True
         process_ds(data)
 
 
 def save_to_db(data):
+    print(data)
+    print(type(data['value']))
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
     point = (
         Point(data["measurement"])
@@ -97,6 +105,8 @@ def save_to_db(data):
     write_api.write(bucket=BUCKET, org=ORG, record=point)
 
 def save_alarm(data):
+    if (type(data)==str):
+        data = json.loads(data)
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
     point = (
         Point(data["measurement"])

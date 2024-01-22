@@ -43,7 +43,7 @@ def generate_payload(value, settings, topic_num=0):
         
 def generate_alarm_payload(value):
     payload = {
-        "measurement": "alarm-state",
+        "measurement": 'alarm-state',
         "value": value
     }
     ret_payload = json.dumps(payload)

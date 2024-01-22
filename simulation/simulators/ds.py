@@ -35,6 +35,7 @@ def run_ds_simulator(settings, callback, stop_event, publish_event):
                 activate_alarm("deactivate", settings["simulated"], settings["name"], settings["runs_on"])
 
         if counter >= 4:
+            alarm_activated = True
             activate_alarm("activate", settings["simulated"], settings["name"], settings["runs_on"], True)
         previous = pressed
         time.sleep(1)

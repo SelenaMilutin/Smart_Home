@@ -33,8 +33,8 @@ if __name__ == "__main__":
         run_ds(ds1_setings, threads, stop_event)
         # dus1_settings = settings["DUS1"]
         # run_dus(dus1_settings, threads, stop_event)
-        dms_settings = settings["DMS"]
-        run_dms(dms_settings, threads, stop_event)
+        # dms_settings = settings["DMS"]
+        # run_dms(dms_settings, threads, stop_event)
         # light_settings = settings["DL"]
         # run_light(light_settings, threads, stop_event)
         # rpir1_setings = settings["RPIR1"]
@@ -43,8 +43,8 @@ if __name__ == "__main__":
         # run_pir(rpir2_setings, threads, stop_event, "room")
         # dpir1_setings = settings["DPIR1"]
         # run_pir(dpir1_setings, threads, stop_event, "door")
-        buzzer_setings = settings["DB"]
-        run_buzzer(buzzer_setings, threads, stop_event)
+        # buzzer_setings = settings["DB"]
+        # run_buzzer(buzzer_setings, threads, stop_event)
         while True:
             time.sleep(1)
 

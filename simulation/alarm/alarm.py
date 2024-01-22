@@ -36,7 +36,7 @@ def publish_alarm(activate, simulated, component_name, runs_on):
     global publish_data_counter, publish_data_limit
     payload = generate_alarm_payload(1 if activate=="activate" else 0)
     with counter_lock:
-        dht_batch.append(("alarmmm", json.dumps(payload), 0, True))
+        dht_batch.append(("alarmmm", payload, 0, True))
         publish_data_counter += 1
 
     if publish_data_counter >= publish_data_limit:
