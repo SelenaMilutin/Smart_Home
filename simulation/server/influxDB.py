@@ -111,6 +111,8 @@ def save_alarm(data):
         .field("value", data["value"])
     )
     write_api.write(bucket=BUCKET, org=ORG, record=point)
+    socketio.emit('alarm-socket', json.dumps({'data': str(data["value"])}))
+
 
 @app.route('/pir', methods=['GET'])
 def store_data():
@@ -176,14 +178,14 @@ def retrieve_aggregate_data(piName):
     # print(jsonify(devices))
     return jsonify(devices)
 
-@app.route('/alarm-system-activated/<pi_name>', methods=['GET'])
-def get_alarm_system_active(pi_name):
-    return jsonify(get_alarm_system_state("-1d", "alarm-system", pi_name))
+@app.route('/alarm-system-state', methods=['GET'])
+def get_alarm_system_active():
+    return json.dumps({'data': str(get_alarm_system_state())})
 
 
-@app.route('/alarm-state/<pi_name>', methods=['GET'])
-def get_alarm_state_active(pi_name):
-    return jsonify(get_alarm_state())
+@app.route('/alarm-state', methods=['GET'])
+def get_alarm_state_active():
+    return json.dumps({'data': str(get_alarm_state())})
 
 @app.route('/clock', methods=['POST'])
 def set_clock():

@@ -1,9 +1,15 @@
 <div class="toolbar">
     <h2>IOT</h2>
     <nav>
-        <a routerLink="/">Home</a>
-        <a (click)="alarmOff()">alarm off</a>
+        <a class="hover" routerLink="/">Home</a>
     </nav>
+    <a class="state" *ngIf="alarmSystem">alarm system: ACTIVE</a>
+    <a class="state" *ngIf="!alarmSystem">alarm system: INACTIVE</a>
+    <a class="state" *ngIf="!alarm"> no alarms active </a>
+    <div *ngIf="alarm">
+        <a class="blink">! ALARM !</a>
+        <a class="hover" (click)="alarmOff()">alarm off</a>
+    </div>
 </div>
 <router-outlet></router-outlet>
 
