@@ -10,4 +10,18 @@
     <div>
         <iframe [src]="getSanitizedUrl()" width="100%" height="600" frameborder="0"></iframe>
     </div>
+
+    <div *ngIf="piName=='PI3'" class="centered">
+        <h2>Setting RGB</h2>
+        <div class="centered" style="flex-direction: row;" >
+            <button  mat-button (click)="setRGB('1')"> on </button>
+            <button  mat-button (click)="setRGB('0')"> off </button>
+            <div *ngFor="let entry of colorList">
+                <button  mat-button (click)="setRGB(entry.key)"> 
+                    {{ entry.value }}    
+                </button>
+            </div>
+        </div>
+        <p>{{rgbResult}}</p>
+    </div>
 </div>

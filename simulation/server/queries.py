@@ -8,10 +8,11 @@ from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import sys
 
+
 sys.path.append("../")
 from broker_settings import HOSTNAME, INFLUX_TOKEN, BUCKET, ORG, INFLUXHOSTNAME, PORT
 from alarm.alarm import activate_alarm
-from mqtt_topics import DMS_PIN_REQUEST_TOPIC, B4SD_CLOCK_TOPIC, BUZZER_CLOCK_TOPIC
+from mqtt_topics import DMS_PIN_REQUEST_TOPIC, B4SD_CLOCK_TOPIC, BUZZER_CLOCK_TOPIC, RGB_TOPIC
 
 
 url = f"http://{INFLUXHOSTNAME}:8086"
@@ -223,6 +224,12 @@ def write_clock_db(hour, minute):
         .field("minute", minute)
     )
     write_api.write(bucket=BUCKET, org=ORG, record=point)   
+
+
+def publish_rgb(val):
+
+    publish.single(RGB_TOPIC, val, hostname=HOSTNAME, port=PORT)
+
 
 if __name__=="__main__":
     print(get_sef_movement())

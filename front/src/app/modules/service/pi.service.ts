@@ -51,4 +51,9 @@ export class PiService {
     return this.http.get<any>(environment.apiHost + '/last-clock')
   }
 
+
+  setRGB(val: string) {
+    return this.http.put<any>(environment.apiHost + '/rgb', {'val': val})
+  }
+
 }

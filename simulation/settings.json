@@ -193,8 +193,8 @@
         "digits": [22,27,17,24],
         "name": "B4SD",
         "blink": false,
-        "topic": ["display-B4SD"]
-
+        "topic": ["display-B4SD"],
+        "measurement": "display"
     },
     "BIR": {
         "simulated": true,

@@ -45,4 +45,25 @@ input[type="number"] {
     appearance: none;
     -moz-appearance: textfield; /* Firefox */
 }
-  
+
+.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 50px;
+}
+
+
+button {
+    width: 10vw;
+    height: 3em;
+    font-size: larger;
+    padding: 10px;
+    background-color: rgb(28, 30, 34);
+    color: white;
+}
+
+button:hover {
+    background-color: rgb(62, 66, 73);
+}

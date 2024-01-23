@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PiService } from '../service/pi.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-clock',
@@ -39,6 +40,7 @@ export class ClockComponent implements OnInit {
     this.piService.setClockOff(reason).subscribe((res: any) => {
       console.log(res)
       this.offResult = res['data']
+      this.fireSwalToast(res['data'])
     })
   }
 
@@ -47,6 +49,7 @@ export class ClockComponent implements OnInit {
       this.piService.setClock(this.inputHour, this.inputMinute).subscribe((res: any) => {
         console.log(res)
         this.setResult = res['data']
+        this.fireSwalToast(res['data'])
       })
     }
   }
@@ -57,6 +60,25 @@ export class ClockComponent implements OnInit {
     } else {
       return num.toString()
     }
+  }
+
+  private fireSwalToast(title: string): void {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    })
+    
+    Toast.fire({
+      icon: 'success',
+      title: title
+    })
   }
 
 }

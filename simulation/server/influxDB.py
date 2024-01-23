@@ -212,6 +212,12 @@ def set_alarm_off():
     activate_alarm("deactivate", verbose=True)
     return {"status": "success", "data": "Alarm turned off."}
 
+@app.route('/rgb', methods=['PUT'])
+def set_rgb():
+    val = request.json.get('val')
+    publish_rgb(val)
+    return {"status": "success", "data": "RGB set."}
+
 if __name__ == '__main__':
     # app.run(debug=True)
     socketio.run(app, debug=True)
