@@ -12,6 +12,7 @@ import { LandingComponent } from './modules/landing/landing.component';
 import { OnePiComponent } from './modules/one-pi/one-pi.component';
 import { SocketIoModule, SocketIoConfig  } from 'ngx-socket-io';
 import { ClockComponent } from './modules/clock/clock.component';
+import { MatTimepickerModule } from 'mat-timepicker';
 
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
@@ -29,6 +30,7 @@ const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
     MaterialModule,
     HttpClientModule,
     SocketIoModule.forRoot(config),
+    MatTimepickerModule 
   ],
   providers: [
     {

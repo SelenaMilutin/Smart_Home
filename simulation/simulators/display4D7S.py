@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import time      
 
 def run_display_simulator(settings, callback, stop_event):

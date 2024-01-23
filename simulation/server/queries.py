@@ -162,7 +162,7 @@ def get_last_set_clock():
         |> last()"""
     returned = handle_influx_query(query)
     data = returned.get("data")
-    return {"hour": -1, "minute": -1} if not data else {"hour": data[0].get("hour"), "minute":data[0].get("minute")}
+    return {"hour": -1, "minute": -1} if not data else {"hour": data[0].get("_value"), "minute":data[1].get("_value")}
 
 def save_people_num(number):
     print('usao u save number')
@@ -188,7 +188,7 @@ def save_alarm_system_state(state, sleep=0):
 
 def save_clock(hour, minute):
     try:
-        print("saving clock {hour}:{minute}")
+        print("saving clock")
 
         # to database
         write_clock_db(hour, minute)
@@ -201,9 +201,9 @@ def save_clock(hour, minute):
     except:
         return {"status": "fail", "data": "Error."}
 
-def save_clock_off(cancel=False):
+def save_clock_off(cancel=True):
     try:
-        print("saving clock off")
+        print("saving clock off for cancel = ", cancel)
         for_reason = "cancel" if cancel else "off"
 
         write_clock_db(-1, -1)

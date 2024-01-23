@@ -28,7 +28,7 @@ def on_message(client, userdata, msg):
     decoded = msg.payload.decode('utf-8')
     try:
         decoded_json = json.loads(decoded)
-        print("MESSAGE clock set:", decoded_json['on'], decoded_json['hour'], decoded_json['minute'], " RECEIVED IN BUZZER")
+        print("MESSAGE clock set:", decoded_json['for'], decoded_json['hour'], decoded_json['minute'], " RECEIVED IN B4SD")
         param_settings['clock'] = {'hour': decoded_json['hour'], 'minute': decoded_json['minute']} 
         if decoded_json['for'] == "off": # clock is turned off
             param_settings['blink'] = False

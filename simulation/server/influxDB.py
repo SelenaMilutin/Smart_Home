@@ -191,15 +191,18 @@ def get_alarm_state_active():
 def set_clock():
     hour = int(request.json.get('hour'))
     minute = int(request.json.get('minute'))
+    print(hour, minute)
     if (hour > 23 or hour < 0) or (minute > 59 or minute < 0):
         return {"status": "fail", "data": "Wrong fields."}
     return jsonify(save_clock(hour, minute))
 
 @app.route('/clock-off', methods=['PUT'])
 def set_clock_off():
-    return jsonify(save_clock_off())
+    reason = request.json.get('reason')
+    cancel = True if reason == 'cancel' else False
+    return jsonify(save_clock_off(cancel))
 
-@app.route('/alarm-state', methods=['GET'])
+@app.route('/last-clock', methods=['GET'])
 def get_last_clock():
     return json.dumps({'data': get_last_set_clock()})
 

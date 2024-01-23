@@ -71,7 +71,7 @@ def on_message(client, userdata, msg):
     if param_settings['name'] == 'BB':
         try:
             decoded_json = json.loads(decoded)
-            print("MESSAGE clock set:", decoded_json['on'], decoded_json['hour'], decoded_json['minute'], " RECEIVED IN BUZZER")
+            print("MESSAGE clock set:", decoded_json['for'], decoded_json['hour'], decoded_json['minute'], " RECEIVED IN BUZZER")
             param_settings['clock'] = {'hour': decoded_json['hour'], 'minute': decoded_json['minute']} 
             if decoded_json['for'] == "off": # clock is turned off
                 param_settings['on'] = False

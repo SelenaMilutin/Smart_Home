@@ -55,7 +55,7 @@ a.hover:hover{
 
 
 ::ng-deep * {
-    color: white !important;
+    color: rgb(227, 227, 227) !important;
 }
 
 p {

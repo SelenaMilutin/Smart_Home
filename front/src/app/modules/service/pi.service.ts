@@ -28,15 +28,27 @@ export class PiService {
   }
 
   putAlarmOff(): Observable<any> {
-    return this.http.put<PiComponent[]>(environment.apiHost + '/alarm-off', {})
+    return this.http.put<any>(environment.apiHost + '/alarm-off', {})
   }
 
   getAlarmState(): Observable<any> {
-    return this.http.get<PiComponent[]>(environment.apiHost + `/alarm-state`)
+    return this.http.get<any>(environment.apiHost + `/alarm-state`)
   }
 
   getAlarmSystemState(): Observable<any> {
-    return this.http.get<PiComponent[]>(environment.apiHost + `/alarm-system-state`)
+    return this.http.get<any>(environment.apiHost + `/alarm-system-state`)
+  }
+
+  setClock(hour: number, minute: number) {
+    return this.http.post<any>(environment.apiHost + '/clock', {'hour': hour, 'minute': minute})
+  }
+
+  setClockOff(reason: string) {
+    return this.http.put<any>(environment.apiHost + '/clock-off', {'reason': reason})
+  }
+
+  getClock() {
+    return this.http.get<any>(environment.apiHost + '/last-clock')
   }
 
 }

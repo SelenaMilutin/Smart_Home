@@ -1,3 +1,27 @@
 <div class="page">
-    <mat-datepicker></mat-datepicker>
+
+    <div class="centered" *ngIf="hour!='-1'">
+        <h2>Clock currently set to:</h2>
+        <h1>{{hour}}:{{minute}}</h1>
+        <button mat-button (click)="turnOff()"> Turn off </button>
+        <p>{{offResult}}</p>
+    </div>
+
+    <div class="centered" *ngIf="hour=='-1'">
+        <h2>No clock set currently.</h2>
+    </div>
+    
+    <mat-divider></mat-divider>
+    <h2>Set new clock</h2>
+    <mat-form-field appearance="fill">
+        <mat-label>Clock time</mat-label>
+      
+        <!-- The timepicker input -->
+        <input matTimepicker #t="matTimepicker" mode="24h"
+          placeholder="Please select time..." name="time"
+          (timeChange)="timeChangeHandler($event)">
+      
+    </mat-form-field>
+    <button mat-button (click)="setClock()"> Save clock </button>
+    <p>{{setResult}}</p>
 </div>
