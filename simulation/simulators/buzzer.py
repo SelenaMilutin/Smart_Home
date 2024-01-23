@@ -14,6 +14,7 @@ def loop_function(settings, stop_event, publish_event, callback):
                 t = datetime.now()
                 if t.hour == settings['clock']['hour'] and t.minute == settings['clock']['minute']: # clock sounds off at set time
                     settings['on'] = True   
+                    print("CLOCK ACTIVATED IN BUZZER")
         if stop_event.is_set():
             return
         time.sleep(1)    

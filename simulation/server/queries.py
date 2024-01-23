@@ -191,13 +191,7 @@ def save_clock(hour, minute):
         print("saving clock {hour}:{minute}")
 
         # to database
-        write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
-        point = (
-            Point("clock")
-            .field("hour", hour)
-            .field("minute", minute)
-        )
-        write_api.write(bucket=BUCKET, org=ORG, record=point)
+        write_clock_db(hour, minute)
 
         # publish to devices
         publish.single(BUZZER_CLOCK_TOPIC, json.dumps({"hour": hour, "minute": minute, "for": "set"}), hostname=HOSTNAME, port=PORT)
@@ -211,13 +205,24 @@ def save_clock_off(cancel=False):
     try:
         print("saving clock off")
         for_reason = "cancel" if cancel else "off"
+
+        write_clock_db(-1, -1)
         # publish to devices
         publish.single(BUZZER_CLOCK_TOPIC, json.dumps({"hour": -1, "minute": -1, "for": for_reason}), hostname=HOSTNAME, port=PORT)
         publish.single(B4SD_CLOCK_TOPIC, json.dumps({"hour": -1, "minute": -1, "for": for_reason}), hostname=HOSTNAME, port=PORT)
 
-        return {"status": "success", "data": "Clock off successfully."}
+        return {"status": "success", "data": "Clock turned off successfully."}
     except:
         return {"status": "fail", "data": "Error."}
+
+def write_clock_db(hour, minute):
+    write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+    point = (
+        Point("clock")
+        .field("hour", hour)
+        .field("minute", minute)
+    )
+    write_api.write(bucket=BUCKET, org=ORG, record=point)   
 
 if __name__=="__main__":
     print(get_sef_movement())

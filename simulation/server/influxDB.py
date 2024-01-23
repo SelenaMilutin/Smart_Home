@@ -199,6 +199,10 @@ def set_clock():
 def set_clock_off():
     return jsonify(save_clock_off())
 
+@app.route('/alarm-state', methods=['GET'])
+def get_last_clock():
+    return json.dumps({'data': get_last_set_clock()})
+
 @app.route('/alarm-off', methods=['PUT'])
 def set_alarm_off():
     print("clicked alarm off")
