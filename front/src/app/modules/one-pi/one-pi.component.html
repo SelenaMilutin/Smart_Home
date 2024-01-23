@@ -12,8 +12,8 @@
     </div>
 
     <div *ngIf="piName=='PI3'" class="centered">
-        <h2>Setting RGB</h2>
-        <div class="centered" style="flex-direction: row;" >
+        <h2 style="margin-top:50px">Setting RGB</h2>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; width: 65% !important;" >
             <button  mat-button (click)="setRGB('1')"> on </button>
             <button  mat-button (click)="setRGB('0')"> off </button>
             <div *ngFor="let entry of colorList">
