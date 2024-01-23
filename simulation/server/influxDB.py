@@ -57,6 +57,7 @@ def on_message(client, userdata, msg):
     proces(data)
     # print(data)
     save_to_db(data)
+    emit_table_data({"for": data['name'], "value": data["value"]})
 
 mqtt_client.on_message = on_message
 
@@ -75,19 +76,29 @@ def handle_message(message):
 def emit_updated_data(data):
     socketio.emit('updated_data', {'data': data})
 
+def emit_table_data(data):
+    socketio.emit('table_data', {'data': data})
+
 def emit_alarm(data):
     socketio.emit('alarm', {'data': data})
 
+def emit_lcd_data(data):
+    socketio.emit('lcd', {'data': data})
+
+
 def proces(data):
      if data["measurement"] == "realised" and data["name"].startswith("DPIR"):
-        print("DPIR function")
+        # print("DPIR function")
         people_num = try_detection_DPIR(data["name"][-1])
         emit_updated_data({"from": data["name"], "people_num": people_num});
      if data["measurement"] == "realised" and data["name"].startswith("RPIR"):
-        print("RPIR function")
+        # print("RPIR function")
         isAlarmActivated = try_detection_RPIR(data)
         if isAlarmActivated: #TODO move logic elsewhere
-            emit_alarm({"from": data["name"], "data": "Room Pir detected movement but no one is in the house"});
+            emit_alarm({"from": data["name"], "reason": "Room Pir detected movement but no one is in the house"});
+     if data['name'] == "GDHT":
+         emit_lcd_data({"for": data['measurement'], "value": data["value"]})
+    
 
 
 def save_to_db(data):
@@ -113,7 +124,7 @@ def check_sef():
     data = get_data_gyro()
     is_important = is_sef_movement_important(data)
     if is_important:
-        emit_alarm({"from": data["name"], "data": "Sef moved"});
+        emit_alarm({"from": data["name"], "reason": "Sef moved"});
 
         
 
@@ -178,7 +189,8 @@ def retrieve_aggregate_data(piName):
                 'runsOn': settings[device]['runs_on'],
                 'name': settings[device]['name'],
                 'measurement': settings[device]['measurement'],
-                'topic': settings[device]['topic']
+                'topic': settings[device]['topic'],
+                'value': 0
             })
     # print(jsonify(devices))
     return jsonify(devices)

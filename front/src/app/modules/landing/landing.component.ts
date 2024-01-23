@@ -17,6 +17,7 @@ export class LandingComponent implements OnInit {
   peopleNum: number = 0;
   isAlarmOn: boolean = false;
   deviceName: string = '';
+  alarmReason: string = ''
 
   pies: PI[] = [];
 
@@ -42,7 +43,11 @@ export class LandingComponent implements OnInit {
     });
 
     this.ngxSocket.on('alarm', (data: any) => {
+      this.isAlarmOn = true
       console.log('Received data from alarm:', data["data"]);
+      this.deviceName = data["data"]["from"]
+      this.alarmReason = data["data"]["reason"]
+
     });
 
   

@@ -17,7 +17,7 @@ export class OnePiComponent implements OnInit {
   piName: string = ''
   
   components: PiComponent[] = []
-  displayedColumns: string[] = ['code', 'name', 'simulated', 'measurement', 'runsOn'];
+  displayedColumns: string[] = ['code', 'name', 'simulated', 'measurement', 'runsOn', 'timestamp', 'lastValue'];
   dataSource!: MatTableDataSource<PiComponent>;
   temperature = 22
   hummidity = 18
@@ -45,11 +45,50 @@ export class OnePiComponent implements OnInit {
       this.dataSource.sort = this.sort;
     })
 
+    this.manageTableUpdate()
+
     if (this.piName == "PI2"){
-      this.ngxSocket.on('lcd', (data: any) => {
-        console.log('Received data from server:', data);
-      });
+      this.manageLCD();
     }
+  }
+  manageTableUpdate() {
+    this.ngxSocket.on('table_data', (data: any) => {
+      this.components.forEach(function (component) {
+        if (component.code == data["data"]["for"]){
+          if (data["data"]["for"]!="GSG"){
+            component.value = data["data"]["value"]
+
+          }
+          else if (data["data"]["value"] != 1 ){
+            component.value = data["data"]["value"]
+
+          }
+          component.timestamp = new Date().toLocaleString('en-GB', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: false,
+          });
+        }
+      }) 
+      this.dataSource = new MatTableDataSource<PiComponent>(this.components);
+    })
+  }
+
+  private manageLCD() {
+    this.ngxSocket.on('lcd', (data: any) => {
+      let mesurent = data["data"]["for"];
+      if (mesurent == "temperature") {
+        this.temperature = data["data"]["value"];
+      }
+      else {
+        this.hummidity = data["data"]["value"];
+
+      }
+    });
   }
 
   // ngAfterViewInit() {

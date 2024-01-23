@@ -8,19 +8,19 @@ def generate_values(initial_rotation = 0, initial_acceleration = 0):
       while True:
             if i%6==0:
                 i += 1
-                yield 100, 100
+                yield 200, 4
             rotation = rotation + random.randint(-1, 1)
             acceleration = acceleration + random.randint(-1, 1)
-            if acceleration < 0:
-                  acceleration = 0
-            if acceleration > 10:
-                  acceleration = 10
+            if acceleration < -2:
+                  acceleration = -2
+            if acceleration > 2:
+                  acceleration = 2
             i += 1
             yield rotation, acceleration
 
 def run_gyro_simulation(delay, settings, callback, stop_event, publish_event):
     for rotation, acceleration in generate_values():
             time.sleep(delay)  # Delay between readings (adjust as needed)
-            callback(rotation, acceleration, publish_event, settings)
+            callback(f"{rotation},0,0", f"{acceleration},0,0", publish_event, settings)
             if stop_event.is_set():
                   break

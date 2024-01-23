@@ -140,7 +140,7 @@
         "pin": 27,
         "runs_on": "PI2",
         "name": "GSG",
-        "measurement": ["rotation", "acceleration"],
+        "measurement": ["rotation2", "acceleration2"],
         "topic": ["rotation", "acceleration"]
     },
     "RPIR3": {

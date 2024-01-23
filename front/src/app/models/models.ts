@@ -4,7 +4,9 @@ export interface PiComponent {
     runsOn: string,
     name: string,
     measurement: string[],
-    topic: string[]
+    topic: string[],
+    value: number | string,
+    timestamp: string | null,
 }
 
 export interface PI {

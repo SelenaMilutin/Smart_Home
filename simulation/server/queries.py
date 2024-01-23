@@ -48,7 +48,6 @@ def try_detection_DPIR(dus_id):
 
 def get_data_DPIR(time, measurement, device_name):
         data = get_data_by_time_measurment_device_name(time, measurement, device_name)
-        # people_num = get_people_num()  #TODO da li treba lock, treba lock
         people_num = get_last_data("people_num")
         if not data or len(data) < 2 :
             return people_num
@@ -57,7 +56,6 @@ def get_data_DPIR(time, measurement, device_name):
         if data[0].get("_value") >  data[-1].get("_value"):
             people_num += 1
            
-        # save_settings({"PEOPLE_NUMBER": people_num}, "../house_info.json")
         return people_num
 
 def get_data_by_time_measurment_device_name(time, measurement, device_name):
@@ -71,7 +69,7 @@ def get_data_by_time_measurment_device_name(time, measurement, device_name):
 
 def get_last_data(measurement):
     query = f"""from(bucket: "{BUCKET}")
-        |> range(start: -30d)  // Assuming a large enough time range
+        |> range(start: -30d)
         |> filter(fn: (r) => r._measurement == "{measurement}")
         |> last(column: "_value")"""
     returned = handle_influx_query(query)
@@ -82,29 +80,42 @@ def get_last_data(measurement):
 def get_sum_of_values_by_time_measurment_device_name(time, measurement, device_name):
     query = f"""from(bucket: "{BUCKET}")
         |> range(start: -{time})
-        |> filter(fn: (r) => r._measurement == "{measurement}" and r["name"] == "{device_name}")
-        |> sum(column: "_value")"""
+        |> filter(fn: (r) => r._measurement == "{measurement}" and r["name"] == "{device_name}")"""
     returned = handle_influx_query(query)
     # print(returned)
     data = returned.get("data")
-    sum_of_values = 0 if not data else data[0].get("_value", 0)
-    return sum_of_values
+    sum = 0
+    for record in data:
+        all_three = record.get("_value")
+        numbers = all_three.split(",")
+        # print(numbers)
+        for number in numbers:
+            sum += abs(float(number))
+    return sum
 
 
 def is_sef_movement_important(data):
-    sum = get_sum_of_values_by_time_measurment_device_name("5s", "rotation", "GSG")
+    sum_rot = get_sum_of_values_by_time_measurment_device_name("5s", data["measurement"][0], "GSG")
+    sum_ac = get_sum_of_values_by_time_measurment_device_name("5s", data["measurement"][1], "GSG")
+    print("acel", sum_ac)
+    print("rotat", sum_rot)
     # print(sum)
-    if sum > 100:
+    if sum_rot > 100:
         activate_alarm("activate", data["simulated"], data["name"], data["runs_on"])
-    return sum > 100
+    else:
+        if sum_ac > 4:
+            activate_alarm("activate", data["simulated"], data["name"], data["runs_on"])
+    
+    return sum_rot > 100
     
 
 def save_people_num(number):
-    print('usao u save number')
+    # print('usao u save number')
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
     point = (
         Point("people_num")
         .field("value", number)
+        # .field("value", number)
     )
     write_api.write(bucket=BUCKET, org=ORG, record=point)
 
