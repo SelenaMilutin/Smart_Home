@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import { Socket } from 'ngx-socket-io';
-
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-one-pi',
@@ -21,6 +21,19 @@ export class OnePiComponent implements OnInit {
   dataSource!: MatTableDataSource<PiComponent>;
   temperature = 22
   hummidity = 18
+  rgbResult: string = ''
+
+  colorDict: Record<string, string> = {
+    '2': 'green',
+    '3': 'blue',
+    '4': ' yellow',
+    '5': 'purple',
+    '6': 'light blue',
+    '7': 'white',
+    '8': 'red'
+  }
+  colorList: { key: string, value: string }[] = Object.entries(this.colorDict).map(([key, value]) => ({ key, value }));
+
 
   constructor(private readonly piService:PiService,
     private sanitizer: DomSanitizer,
@@ -115,6 +128,33 @@ export class OnePiComponent implements OnInit {
 
   getName(code: string): string {
     return this.piService.deviceNames[code]
+  }
+  
+  setRGB(val: string) {
+    console.log(val)
+    this.piService.setRGB(val).subscribe((res: any) => {
+      this.rgbResult = res['data'];
+      this.fireSwalToast(res['data']);
+    })
+  }
+
+  private fireSwalToast(title: string): void {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    })
+    
+    Toast.fire({
+      icon: 'success',
+      title: title
+    })
   }
 
 }

@@ -10,15 +10,14 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqtt
 import json
 from flask_cors import CORS
-from queries import try_detection_DPIR, influxdb_client, try_detection_RPIR, is_sef_movement_important
+from queries import *
 sys.path.append("../")
 from settings import load_settings, save_settings
-from broker_settings import HOSTNAME, PORT, INFLUX_TOKEN, BUCKET, ORG, people_num, INFLUXHOSTNAME
+from mqtt_topics import DMS_PIN_REQUEST_TOPIC
+from broker_settings import HOSTNAME, PORT, BUCKET, ORG, people_num, INFLUXHOSTNAME
 import atexit
 
 from apscheduler.schedulers.background import BackgroundScheduler
-
-
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -53,9 +52,16 @@ def on_connect(client, userdata, flags, rc): #subscribe na topike
 mqtt_client.on_connect = on_connect
 
 def on_message(client, userdata, msg):
-    data = json.loads(msg.payload.decode('utf-8'))
+    payload = msg.payload.decode('utf-8')
+    # print("u on message payload", type(payload), payload)
+    data = json.loads(payload)
+    # print("u on message", type(data), data)
     proces(data)
-    # print(data)
+    # if (type(data)==str):
+    #     data = json.loads(data)
+    if data['measurement'] == "alarm-state":
+        save_alarm(data)
+        return
     save_to_db(data)
     emit_table_data({"for": data['name'], "value": data["value"]})
 
@@ -87,22 +93,30 @@ def emit_lcd_data(data):
 
 
 def proces(data):
-     if data["measurement"] == "realised" and data["name"].startswith("DPIR"):
+    if data["measurement"] == "realised" and data["name"].startswith("DPIR"):
         # print("DPIR function")
         people_num = try_detection_DPIR(data["name"][-1])
         emit_updated_data({"from": data["name"], "people_num": people_num});
-     if data["measurement"] == "realised" and data["name"].startswith("RPIR"):
+    if data["measurement"] == "realised" and data["name"].startswith("RPIR"):
         # print("RPIR function")
         isAlarmActivated = try_detection_RPIR(data)
         if isAlarmActivated: #TODO move logic elsewhere
             emit_alarm({"from": data["name"], "reason": "Room Pir detected movement but no one is in the house"});
-     if data['name'] == "GDHT":
+    if data['name'] == "GDHT":
          emit_lcd_data({"for": data['measurement'], "value": data["value"]})
     
+    # print("u proces", type(data), data)
+    if (type(data)==str):
+        data = json.loads(data)
+    if data["measurement"] == "entered-pin" and data["name"].startswith("DMS"):
+        process_entered_pin(data)
+    if data["measurement"] == "motion" and data["name"].startswith("DS"):
+        if ORG == "my-influx":
+            data["value"] = True
+        process_ds(data)
 
 
 def save_to_db(data):
-    # print(data)
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
     point = (
         Point(data["measurement"])
@@ -112,6 +126,18 @@ def save_to_db(data):
         .field("value", data["value"])
     )
     write_api.write(bucket=BUCKET, org=ORG, record=point)
+
+def save_alarm(data):
+    if (type(data)==str):
+        data = json.loads(data)
+    write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+    point = (
+        Point(data["measurement"])
+        .field("value", data["value"])
+    )
+    write_api.write(bucket=BUCKET, org=ORG, record=point)
+    socketio.emit('alarm-socket', json.dumps({'data': str(data["value"])}))
+
 
 @app.route('/pir', methods=['GET'])
 def store_data():
@@ -195,7 +221,45 @@ def retrieve_aggregate_data(piName):
     # print(jsonify(devices))
     return jsonify(devices)
 
+@app.route('/alarm-system-state', methods=['GET'])
+def get_alarm_system_active():
+    return json.dumps({'data': str(get_alarm_system_state())})
 
+
+@app.route('/alarm-state', methods=['GET'])
+def get_alarm_state_active():
+    return json.dumps({'data': str(get_alarm_state())})
+
+@app.route('/clock', methods=['POST'])
+def set_clock():
+    hour = int(request.json.get('hour'))
+    minute = int(request.json.get('minute'))
+    print(hour, minute)
+    if (hour > 23 or hour < 0) or (minute > 59 or minute < 0):
+        return {"status": "fail", "data": "Wrong fields."}
+    return jsonify(save_clock(hour, minute))
+
+@app.route('/clock-off', methods=['PUT'])
+def set_clock_off():
+    reason = request.json.get('reason')
+    cancel = True if reason == 'cancel' else False
+    return jsonify(save_clock_off(cancel))
+
+@app.route('/last-clock', methods=['GET'])
+def get_last_clock():
+    return json.dumps({'data': get_last_set_clock()})
+
+@app.route('/alarm-off', methods=['PUT'])
+def set_alarm_off():
+    print("clicked alarm off")
+    activate_alarm("deactivate", verbose=True)
+    return {"status": "success", "data": "Alarm turned off."}
+
+@app.route('/rgb', methods=['PUT'])
+def set_rgb():
+    val = request.json.get('val')
+    publish_rgb(val)
+    return {"status": "success", "data": "RGB set."}
 
 if __name__ == '__main__':
     # app.run(debug=True)

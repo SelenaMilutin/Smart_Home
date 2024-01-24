@@ -1,10 +1,10 @@
 
-import paho.mqtt.publish as publish
 import sys
 from server.messenger_sender import generate_payload
 from simulators.dht import run_dht_simulator
 import threading
 import time
+import paho.mqtt.publish as publish
 sys.path.append("../")
 from broker_settings import HOSTNAME, PORT
 

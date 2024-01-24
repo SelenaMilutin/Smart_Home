@@ -2,13 +2,14 @@
 
 import sys
 import time
-from server.messenger_sender import generate_payload
-from simulation.mqtt_topics import DOOR_LIGHT_TOPIC
-from simulators.light import run_light_simulator
 import threading
 import paho.mqtt.publish as publish
-sys.path.append("../")
 import paho.mqtt.client as mqtt
+
+sys.path.append("../")
+from simulators.light import run_light_simulator
+from server.messenger_sender import generate_payload
+from mqtt_topics import DOOR_LIGHT_TOPIC
 from broker_settings import HOSTNAME, PORT
 
 dht_batch = []
@@ -37,14 +38,14 @@ publisher_thread.start()
 
 def callback(val, settings, publish_event, verbose = False):
     global publish_data_counter, publish_data_limit
-    if verbose:
+    # if verbose:
         # t = time.localtime()
         # print("LIGHT")
         # print("="*20)
         # print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
         # print(f"Entered pin {pin_val}")
-        print(f"Light {val}")
-    print(f"Light {val}")
+        # print(f"Light {val}")
+    print(f"Light callback with {val}")
     button_payload = generate_payload(val, settings)
     with counter_lock:
         dht_batch.append((settings["topic"][0], button_payload, 0, True))
@@ -64,6 +65,7 @@ def on_message(client, userdata, msg):
         print("MESSAGE LIGHT on RECEIVED IN LIGHT")
         param_settings['on'] = True
         time.sleep(10)
+        print("SETTING LIGHT off IN ON MESSAGE")
         param_settings['on'] = False
 
 param_settings = None

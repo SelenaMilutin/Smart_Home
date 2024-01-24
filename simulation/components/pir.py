@@ -73,7 +73,7 @@ def callback_door_pir(settings, publish_event, isDPIR1 = False, verbose = False)
         publish_event.set()
 
     if isDPIR1:
-        print("ITS DOOR PIR 1")
+        # print("DoorPir callback, followed by MESSAGE LIGHT")
         publish.single(DOOR_LIGHT_TOPIC, "on", hostname=HOSTNAME, port=PORT)
 
 

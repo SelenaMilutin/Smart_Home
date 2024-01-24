@@ -3,9 +3,11 @@ import sys
 import threading
 from broker_settings import HOSTNAME, PORT
 import paho.mqtt.publish as publish
+import sys 
 
 sys.path.append("../")
 from mqtt_topics import ALARM_ACTIVATION_TOPIC, BUZZER_ALARM_TOPIC
+from server.messenger_sender import generate_alarm_payload
 
 dht_batch = []
 publish_data_counter = 0
@@ -30,17 +32,11 @@ publisher_thread = threading.Thread(target=publisher_task, args=(publish_event, 
 publisher_thread.daemon = True
 publisher_thread.start()
 
-def publish_alarm(activate, simulated, component_name, runs_on):
+def publish_alarm(activate):
     global publish_data_counter, publish_data_limit
-    payload = {
-        "measurement": "alarm",
-        "value": 1 if activate=="activate" else 0,
-        "simulated": simulated,
-        "name": component_name,
-        "runs_on": runs_on
-    }
+    payload = generate_alarm_payload(1 if activate=="activate" else 0)
     with counter_lock:
-        dht_batch.append(("alarmmm", json.dumps(payload), 0, True))
+        dht_batch.append(("alarmmm", payload, 0, True))
         publish_data_counter += 1
 
     if publish_data_counter >= publish_data_limit:
@@ -50,11 +46,14 @@ def publish_to_buzzer(activate):
     publish.single(BUZZER_ALARM_TOPIC, activate, hostname=HOSTNAME, port=PORT)
 
 
-def activate_alarm(activate, simulated, component_name, runs_on, verbose = False):
+def activate_alarm(activate, verbose = False):
     # activate: "activate" OR "deactivate"
     if verbose:
         print(f"Alarm")
         print("="*20)
-    publish_alarm(activate, simulated, component_name, runs_on)
+        print(activate)
+    # if component_name == "DS1" or "DS2" and ! alarm system active: 
+        # return 
+    publish_alarm(activate)
     publish_to_buzzer(activate)
 

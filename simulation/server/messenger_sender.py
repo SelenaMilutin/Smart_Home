@@ -1,5 +1,3 @@
-import paho.mqtt.client as mqtt
-import paho.mqtt.publish as publish
 import json
 from threading import Lock
 from copy import deepcopy
@@ -43,12 +41,22 @@ def generate_payload(value, settings, topic_num=0):
     temperature_payload = json.dumps(payload)
     return temperature_payload
         
-def generate_alarm_payload(value, settings, topic_num=0):
+def generate_alarm_payload(value):
     payload = {
-        "measurement": "alarm-activation",
+        "measurement": 'alarm-state',
+        "value": value
+    }
+    ret_payload = json.dumps(payload)
+    return ret_payload
+
+def generate_dms_payload(value, settings, is_correct_pin, topic_num=0):
+    payload = {
+        "measurement": settings["measurement"][topic_num],
         "value": value,
         "simulated": settings["simulated"],
         "name": settings["name"],
+        "is_correct": is_correct_pin,
+        "should_be_correct": settings["should_be_correct"],
         "runs_on": settings["runs_on"]
     }
     temperature_payload = json.dumps(payload)

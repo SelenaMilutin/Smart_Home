@@ -55,4 +55,33 @@ export class PiService {
     return this.http.get<PiComponent[]>(environment.apiHost + `/component/${piName}`)
   }
 
+  putAlarmOff(): Observable<any> {
+    return this.http.put<any>(environment.apiHost + '/alarm-off', {})
+  }
+
+  getAlarmState(): Observable<any> {
+    return this.http.get<any>(environment.apiHost + `/alarm-state`)
+  }
+
+  getAlarmSystemState(): Observable<any> {
+    return this.http.get<any>(environment.apiHost + `/alarm-system-state`)
+  }
+
+  setClock(hour: number, minute: number) {
+    return this.http.post<any>(environment.apiHost + '/clock', {'hour': hour, 'minute': minute})
+  }
+
+  setClockOff(reason: string) {
+    return this.http.put<any>(environment.apiHost + '/clock-off', {'reason': reason})
+  }
+
+  getClock() {
+    return this.http.get<any>(environment.apiHost + '/last-clock')
+  }
+
+
+  setRGB(val: string) {
+    return this.http.put<any>(environment.apiHost + '/rgb', {'val': val})
+  }
+
 }

@@ -1,7 +1,8 @@
+import json
 import sys
 import paho.mqtt.publish as publish
 from server.messenger_sender import generate_payload
-from simulation.mqtt_topics import BUZZER_ALARM_TOPIC
+from simulation.mqtt_topics import BUZZER_ALARM_TOPIC, BUZZER_CLOCK_TOPIC
 from simulators.buzzer import run_buzz_simulation
 import threading
 sys.path.append("../")
@@ -49,8 +50,11 @@ def callback(val, settings, publish_event, verbose = False):
     if publish_data_counter >= publish_data_limit:
         publish_event.set()
 
+param_settings = None   
+
 def on_connect(client, userdata, flags, rc): 
     client.subscribe(BUZZER_ALARM_TOPIC)
+    client.subscribe(BUZZER_CLOCK_TOPIC)
 
 def on_message(client, userdata, msg):
     global param_settings
@@ -58,12 +62,23 @@ def on_message(client, userdata, msg):
     if decoded == "activate":
         print("MESSAGE activate ALARM RECEIVED IN BUZZER")
         param_settings['on'] = True
+        return
     if decoded == "deactivate":
         print("MESSAGE deactivate ALARM RECEIVED IN BUZZER")
         param_settings['on'] = False
+        return
 
-param_settings = None
-     
+    if param_settings['name'] == 'BB':
+        try:
+            decoded_json = json.loads(decoded)
+            print("MESSAGE clock set:", decoded_json['for'], decoded_json['hour'], decoded_json['minute'], " RECEIVED IN BUZZER")
+            param_settings['clock'] = {'hour': decoded_json['hour'], 'minute': decoded_json['minute']} 
+            if decoded_json['for'] == "off": # clock is turned off
+                param_settings['on'] = False
+        except json.JSONDecodeError:
+            print("Error decoding JSON")
+
+
 
 def run_buzzer(settings, threads, stop_event):
 
@@ -74,6 +89,8 @@ def run_buzzer(settings, threads, stop_event):
     mqtt_client.on_connect = on_connect
     mqtt_client.on_message = on_message
     mqtt_client.loop_start()
+
+    param_settings['clock'] = {'hour': -1, 'minute': -1} 
 
     if settings['simulated']:
         print("Starting buzz sumilator")

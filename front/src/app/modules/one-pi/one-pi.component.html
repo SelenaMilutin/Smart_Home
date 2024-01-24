@@ -61,4 +61,18 @@
             <div class="overlay-text2">Humidity: {{hummidity}}</div>
         </div>
     </div>
+    
+    <div *ngIf="piName=='PI3'" class="centered">
+        <h2 style="margin-top:50px">Setting RGB</h2>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; width: 65% !important;" >
+            <button  mat-button (click)="setRGB('1')"> on </button>
+            <button  mat-button (click)="setRGB('0')"> off </button>
+            <div *ngFor="let entry of colorList">
+                <button  mat-button (click)="setRGB(entry.key)"> 
+                    {{ entry.value }}    
+                </button>
+            </div>
+        </div>
+        <p>{{rgbResult}}</p>
+    </div>
 </div>

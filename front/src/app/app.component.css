@@ -12,6 +12,9 @@
     margin-left: 20px;
 }
 
+nav {
+    margin-right: 18vw;
+}
 
 h2, a {
     color: rgb(232, 232, 232); 
@@ -29,12 +32,18 @@ a {
     padding: 15px;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    cursor: default;
 }
 
-a:hover {
+a.state {
+    letter-spacing: normal;
+}
+
+a.hover:hover{
     background-color: rgb(62, 66, 73);
     transition: background-color 0.3s ease;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 ::ng-deep body {
@@ -46,5 +55,13 @@ a:hover {
 
 
 ::ng-deep * {
-    color: white !important;
+    color: rgb(227, 227, 227) !important;
+}
+
+p {
+    cursor: default;
+}
+
+.blink {
+    background-color: red;
 }

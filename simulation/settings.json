@@ -53,10 +53,12 @@
         "C2": 16,
         "C3": 20,
         "C4": 21,
+        "pin": 1234,
+        "should_be_correct": false,
         "runs_on": "PI1",
         "name": "DMS",
-        "measurement": ["pressed"],
-        "topic": ["pressed-DMS"]
+        "measurement": ["entered-pin"],
+        "topic": ["entered-pin-DMS"]
     },
     "RPIR1": {
         "simulated": true,
@@ -190,8 +192,9 @@
         "segments": [11,4,23,8,7,10,18,25],
         "digits": [22,27,17,24],
         "name": "B4SD",
-        "topic": ["display-B4SD"]
-
+        "blink": false,
+        "topic": ["display-B4SD"],
+        "measurement": "display"
     },
     "BIR": {
         "simulated": true,
