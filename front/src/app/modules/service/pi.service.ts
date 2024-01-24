@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class PiService {
   
+  
   constructor(private readonly http: HttpClient) { }
   
   private selectedDevice = new BehaviorSubject<string>("");
@@ -54,6 +55,11 @@ export class PiService {
   getComponents(piName: string): Observable<PiComponent[]> {
     return this.http.get<PiComponent[]>(environment.apiHost + `/component/${piName}`)
   }
+
+  getLatestPeopleNum(): Observable<number> {
+    return this.http.get<number>(environment.apiHost + `/people_num`)
+  }
+
 
   putAlarmOff(): Observable<any> {
     return this.http.put<any>(environment.apiHost + '/alarm-off', {})

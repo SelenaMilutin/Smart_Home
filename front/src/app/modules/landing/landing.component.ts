@@ -41,6 +41,12 @@ export class LandingComponent implements OnInit {
       this.peopleNum = data["data"]["people_num"]
     });
 
+    this.piService.getLatestPeopleNum().subscribe((res: any) => {
+      console.log("AAAAAAA")
+      console.log(res)
+      this.peopleNum = res
+    })
+
   }
 
   sendMessage() {

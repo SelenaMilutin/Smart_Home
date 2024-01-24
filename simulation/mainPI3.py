@@ -24,14 +24,14 @@ if __name__ == "__main__":
     threads = []
     stop_event = threading.Event()
     try:
-        # rpir1_setings = settings["RPIR4"]
-        # run_pir(rpir1_setings, threads, stop_event, "room")
-        # dht1_settings = settings['RDHT4']
-        # run_dht(dht1_settings, threads, stop_event)
-        # buzzer_setings = settings["BB"]
-        # run_buzzer(buzzer_setings, threads, stop_event)
-        # display4D7s_settings = settings["B4SD"]
-        # run_4D7Sdisplay(display4D7s_settings, threads, stop_event)
+        rpir1_setings = settings["RPIR4"]
+        run_pir(rpir1_setings, threads, stop_event, "room")
+        dht1_settings = settings['RDHT4']
+        run_dht(dht1_settings, threads, stop_event)
+        buzzer_setings = settings["BB"]
+        run_buzzer(buzzer_setings, threads, stop_event)
+        display4D7s_settings = settings["B4SD"]
+        run_4D7Sdisplay(display4D7s_settings, threads, stop_event)
         bir_settings = settings["BIR"]
         run_bir(bir_settings, threads, stop_event)
         rgb_settings = settings["BRGB"]
