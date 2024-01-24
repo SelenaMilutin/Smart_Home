@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import time
 
 
+
 def get_distance(pin_echo, pin_trig):
     GPIO.output(pin_trig, False)
     time.sleep(0.2)
@@ -32,15 +33,16 @@ def get_distance(pin_echo, pin_trig):
     return distance
 
 
-def run_dus_loop(pin_trig, pin_echo, callback, stop_event):
+def run_dus_loop(settings, callback, stop_event, publish_event):
+    pin_trig =settings['pin_trig']
+    pin_echo = settings['pin_echo']
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(pin_trig, GPIO.OUT)
     GPIO.setup(pin_echo, GPIO.IN)
 
     while True:
         val = get_distance(pin_echo, pin_trig)
-        callback(val)
-
+        callback(val, settings, publish_event)
         if stop_event.is_set():
             return
 

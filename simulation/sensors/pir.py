@@ -1,11 +1,18 @@
 import RPi.GPIO as GPIO
 import time
 
-def run_pir_loop(port, callback, stop_event):
+def custom_callback(callback, settings, publish_event, isDPIR1=False, verbose=True):
+    print(f"Callback wrapper with settings: {settings}")
+    callback(settings, publish_event, isDPIR1)
+
+def run_pir_loop(settings, callback, stop_event, publish_event):
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(port, GPIO.IN)
+    GPIO.setup(settings['pin'], GPIO.IN)
+
+    isDPIR1 = True if settings.get("isDoor") != None and settings.get("isDoor") else False
+    callback_with_params = lambda channel: custom_callback(callback = callback, settings=settings, publish_event=publish_event, isDPIR1=isDPIR1, verbose=True)
     
-    GPIO.add_event_detect(port, GPIO.RISING, callback=callback)
+    GPIO.add_event_detect(settings['pin'], GPIO.RISING, callback=callback_with_params)
     # GPIO.add_event_detect(port, GPIO.FALLING, callback=no_motion)
 
     # if stop_event.is_set():

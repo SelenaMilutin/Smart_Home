@@ -1,0 +1,51 @@
+.page {
+    margin: 1%;
+    padding-top: 5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    padding-bottom: 10vh;
+}
+
+.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 50px;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+h2 {
+    font-size: 1.8em;
+}
+
+::ng-deep .circle {
+    background: rgb(78, 78, 78) !important;
+}
+
+::ng-deep .mat-dialog-container {
+    background: rgb(36, 36, 36) !important;
+}
+
+
+mat-form-field {
+    width: 20vw !important;
+}
+
+button {
+    width: 10vw;
+    height: 3em;
+    font-size: larger;
+    padding: 10px;
+    background-color: rgb(28, 30, 34);
+}
+
+button:hover {
+    background-color: rgb(62, 66, 73);
+}

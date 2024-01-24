@@ -1,6 +1,7 @@
 import time
 import random
 
+
 def generate_values():
       dist = 0
       while True:
@@ -13,9 +14,9 @@ def generate_values():
             yield dist
 
 
-def run_dus_simulator(callback, stop_event):
+def run_dus_simulator(settings, callback, stop_event, publish_event):
     for val in generate_values():
-        callback(val)
+        callback(val, settings, publish_event)
         if stop_event.is_set():
             break
         time.sleep(2)

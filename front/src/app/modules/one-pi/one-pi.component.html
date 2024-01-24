@@ -1,0 +1,78 @@
+<div class="section">
+    <h1>{{piName}}</h1>
+    <mat-divider></mat-divider>
+    
+
+    <table mat-table [dataSource]="dataSource"
+    class="mat-elevation-z8"
+    matSort (matSortChange)="announceSortChange($event)"
+            #eventTable>
+        <!-- Name Column -->
+        <ng-container matColumnDef="code">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
+            <td mat-cell *matCellDef="let element"> {{element?.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let element"> {{getName(element?.name)}} </td>
+        </ng-container>
+        <!-- Name Column -->
+        <ng-container matColumnDef="simulated">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td mat-cell *matCellDef="let element">
+                <ng-container *ngIf="element.simulated; else realDevice">Simulated</ng-container>
+                <ng-template #realDevice>Real Device</ng-template>
+              </td>
+        </ng-container>
+        <!-- Name Column -->
+        <ng-container matColumnDef="measurement">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Measurements </th>
+            <td mat-cell *matCellDef="let element"> {{element?.measurement}} </td>
+        </ng-container>
+        <!-- Name Column -->
+        <ng-container matColumnDef="runsOn">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Runs on </th>
+            <td mat-cell *matCellDef="let element"> {{element?.runsOn}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="timestamp">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Timestamp </th>
+            <td mat-cell *matCellDef="let element"> {{element?.timestamp}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastValue">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Last value </th>
+            <td mat-cell *matCellDef="let element"> {{element?.value}} </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="pointer"></tr>
+    </table>
+
+    <div>
+        <iframe [src]="getSanitizedUrl()" width="100%" height="600" frameborder="0"></iframe>
+    </div>
+
+    <div *ngIf="piName == 'PI2'" class="lcd">
+        <div class="centered">
+            <img width="60%" src="assets/lcd-crop.jpg" alt="lcd">
+            <div class="overlay-text">Temperature: {{temperature}}</div>
+            <div class="overlay-text2">Humidity: {{hummidity}}</div>
+        </div>
+    </div>
+    
+    <div *ngIf="piName=='PI3'" class="centered">
+        <h2 style="margin-top:50px">Setting RGB</h2>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; width: 65% !important;" >
+            <button  mat-button (click)="setRGB('1')"> on </button>
+            <button  mat-button (click)="setRGB('0')"> off </button>
+            <div *ngFor="let entry of colorList">
+                <button  mat-button (click)="setRGB(entry.key)"> 
+                    {{ entry.value }}    
+                </button>
+            </div>
+        </div>
+        <p>{{rgbResult}}</p>
+    </div>
+</div>
