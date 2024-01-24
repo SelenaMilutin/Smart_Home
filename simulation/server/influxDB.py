@@ -56,12 +56,12 @@ def on_message(client, userdata, msg):
     # print("u on message payload", type(payload), payload)
     data = json.loads(payload)
     # print("u on message", type(data), data)
-    proces(data)
     # if (type(data)==str):
     #     data = json.loads(data)
     if data['measurement'] == "alarm-state":
         save_alarm(data)
         return
+    proces(data)
     save_to_db(data)
     emit_table_data({"for": data['name'], "value": data["value"]})
 
@@ -85,8 +85,6 @@ def emit_updated_data(data):
 def emit_table_data(data):
     socketio.emit('table_data', {'data': data})
 
-def emit_alarm(data):
-    socketio.emit('alarm', {'data': data})
 
 def emit_lcd_data(data):
     socketio.emit('lcd', {'data': data})
@@ -100,9 +98,8 @@ def proces(data):
     if data["measurement"] == "realised" and data["name"].startswith("RPIR"):
         # print("RPIR function")
         isAlarmActivated = try_detection_RPIR(data)
-        if isAlarmActivated: #TODO move logic elsewhere
-            emit_alarm({"from": data["name"], "reason": "Room Pir detected movement but no one is in the house"});
-    if data['name'] == "GDHT":
+        
+    if data["name"] == "GDHT":
          emit_lcd_data({"for": data['measurement'], "value": data["value"]})
     
     # print("u proces", type(data), data)
@@ -134,9 +131,10 @@ def save_alarm(data):
     point = (
         Point(data["measurement"])
         .field("value", data["value"])
+        .tag("reason", data["reason"])
     )
     write_api.write(bucket=BUCKET, org=ORG, record=point)
-    socketio.emit('alarm-socket', json.dumps({'data': str(data["value"])}))
+    socketio.emit('alarm-socket', json.dumps({'data': {'value': str(data["value"]), 'reason': data['reason']}}))
 
 
 @app.route('/pir', methods=['GET'])
@@ -149,9 +147,6 @@ def check_sef():
     # print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
     data = get_data_gyro()
     is_important = is_sef_movement_important(data)
-    if is_important:
-        emit_alarm({"from": data["name"], "reason": "Sef moved"});
-
         
 
 
@@ -202,7 +197,10 @@ atexit.register(lambda: scheduler.shutdown())
 #     |> filter(fn: (r) => r._measurement == "{request.args.get("measurement")}")
 #     |> mean()"""
 #     return handle_influx_query(query)
-    
+@app.route('/people_num', methods=['GET'])
+def retrieve_last_people_num():
+    return jsonify(get_last_data("people_num"))
+
 @app.route('/component/<piName>', methods=['GET'])
 def retrieve_aggregate_data(piName):
     devices = []
@@ -252,7 +250,7 @@ def get_last_clock():
 @app.route('/alarm-off', methods=['PUT'])
 def set_alarm_off():
     print("clicked alarm off")
-    activate_alarm("deactivate", verbose=True)
+    activate_alarm("deactivate", "On click.", verbose=True)
     return {"status": "success", "data": "Alarm turned off."}
 
 @app.route('/rgb', methods=['PUT'])

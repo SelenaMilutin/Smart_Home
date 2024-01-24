@@ -25,11 +25,11 @@ def run_ds_simulator(settings, callback, stop_event, publish_event):
             counter = 0
             if alarm_activated:
                 alarm_activated = False
-                activate_alarm("deactivate")
+                activate_alarm("deactivate", "Door sensor closed.")
 
-        if counter >= 4:
+        if counter >= 5:
             alarm_activated = True
-            activate_alarm("activate")
+            activate_alarm("activate", "Door sensor > 5 seconds.")
         previous = pressed
         time.sleep(1)
         if stop_event.is_set():

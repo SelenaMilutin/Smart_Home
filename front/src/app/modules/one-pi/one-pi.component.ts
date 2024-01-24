@@ -129,7 +129,7 @@ export class OnePiComponent implements OnInit {
   getName(code: string): string {
     return this.piService.deviceNames[code]
   }
-  
+
   setRGB(val: string) {
     console.log(val)
     this.piService.setRGB(val).subscribe((res: any) => {

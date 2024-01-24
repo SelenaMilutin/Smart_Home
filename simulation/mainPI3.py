@@ -32,8 +32,8 @@ if __name__ == "__main__":
         # run_buzzer(buzzer_setings, threads, stop_event)
         # display4D7s_settings = settings["B4SD"]
         # run_4D7Sdisplay(display4D7s_settings, threads, stop_event)
-        # bir_settings = settings["BIR"]
-        # run_bir(bir_settings, threads, stop_event)
+        bir_settings = settings["BIR"]
+        run_bir(bir_settings, threads, stop_event)
         rgb_settings = settings["BRGB"]
         run_rgb(rgb_settings, threads, stop_event)
         while True:

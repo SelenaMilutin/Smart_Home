@@ -42,12 +42,12 @@ def handle_influx_query(query):
 def try_detection_RPIR(data):
     people_num = get_last_data("people_num")
     if people_num == 0:
-        activate_alarm("activate")
+        activate_alarm("activate", "Motion detected but no one in the house.")
         return True
     return False
 
 def try_detection_DPIR(dus_id):
-     people_num = get_data_DPIR('5s', 'distance', "DUS" + dus_id)
+     people_num = get_data_DPIR('10s', 'distance', "DUS" + dus_id)
      save_people_num(people_num)
 
      return people_num
@@ -76,7 +76,7 @@ def process_entered_pin(data):
     if data['is_correct']:
         if alarm_state: # deactivation
             print("alarm deactivation")
-            activate_alarm("deactivate", verbose=True)
+            activate_alarm("deactivate", "DMS pin entered.", verbose=True)
             if alarm_system_active:
                 print("alarm system deactivation")
                 save_alarm_system_state(0)
@@ -87,7 +87,7 @@ def process_entered_pin(data):
     else:
         if alarm_system_active == 1 and data['should_be_correct'] and not data['is_correct']:
             print("alarm activation because alarm system active and incorrect pin and should be correct")
-            activate_alarm("activate", verbose=True)
+            activate_alarm("activate", "DMS incorrect pin.", verbose=True)
     return {"status": "success", "data": "ok"}
 
 
@@ -138,14 +138,14 @@ def get_sum_of_values_by_time_measurment_device_name(time, measurement, device_n
 def is_sef_movement_important(data):
     sum_rot = get_sum_of_values_by_time_measurment_device_name("5s", data["measurement"][0], "GSG")
     sum_ac = get_sum_of_values_by_time_measurment_device_name("5s", data["measurement"][1], "GSG")
-    print("acel", sum_ac)
+    # print("acel", sum_ac)
     print("rotat", sum_rot)
     # print(sum)
     if sum_rot > 100:
-        activate_alarm("activate", data["simulated"], data["name"], data["runs_on"])
+        activate_alarm("activate", "Gyroscope rotation detected.")
     else:
         if sum_ac > 4:
-            activate_alarm("activate", data["simulated"], data["name"], data["runs_on"])
+            activate_alarm("activate", "Gyroscope acceleration detected.")
     
     return sum_rot > 100
     

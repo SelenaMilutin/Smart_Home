@@ -50,11 +50,11 @@ def run_ds_rising(settings, threads, callback, publish_event, stop_event):
         print(is_pressed)
         if not is_pressed:
             if alarm_activated:
-                activate_alarm("deactivate")
+                activate_alarm("deactivate", "Door sensor closed.")
             stop_event.set()
         if counter >= 5:
             alarm_activated = True
-            activate_alarm("activate")
+            activate_alarm("activate", "Door sensor > 5 seconds.")
 
         counter += 1
         time.sleep(1)

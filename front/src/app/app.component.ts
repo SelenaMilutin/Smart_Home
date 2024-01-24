@@ -10,6 +10,7 @@ import { Socket } from 'ngx-socket-io';
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'Smart Home';
   alarm = false;
+  alarmReason = ""
   alarmSystem = false;
   
   constructor(private readonly piService:PiService, 
@@ -24,17 +25,18 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.ngxSocket.on('alarm-socket', (data: any) => {
       console.log('Received data from server:', data);
       let decoded = JSON.parse(data)
-      this.alarm = decoded['data'] == '1' ? true: false;
+      this.alarm = decoded['data']['value'] == '1' ? true: false;
+      this.alarmReason = decoded['data']['reason'];
     });
   }
     
   ngAfterViewInit(): void {
     this.piService.getAlarmState().subscribe((res:any) => {
-      this.alarm = res['data'] == '1' ? true: false;
+      this.alarm = res['data']['value'] == '1' ? true: false;
     })
     this.piService.getAlarmSystemState().subscribe((res:any) => {
       console.log(res)
-      this.alarmSystem = res['data'] == '1' ? true: false;
+      this.alarmSystem = res['data']['value'] == '1' ? true: false;
     })
   }
 

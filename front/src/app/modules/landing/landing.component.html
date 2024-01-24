@@ -12,11 +12,7 @@
 </div>
 <div>
     <p>People Inside: {{peopleNum}}</p>
-    <div *ngIf="isAlarmOn">
-        <p >ALARM ACTIVE</p>
-        <p>Device that activated it: {{deviceName}}</p>
-        <p>Alarm reason: {{alarmReason}}</p>
-    </div>
+    
 </div>
 <div>
     <iframe [src]="getSanitizedUrl()" width="100%" height="600" frameborder="0"></iframe>
